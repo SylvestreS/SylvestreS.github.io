@@ -1,0 +1,52 @@
+{
+  "posts": [
+    {
+      "slug": "hello-world",
+      "title": "个人主页上线了",
+      "date": "2026-09-01",
+      "tags": [
+        "随笔",
+        "前端"
+      ],
+      "summary": "用纯 JavaScript 做了一个极简黑白的主页，托管在 GitHub Pages 上。",
+      "words": 271,
+      "minutes": 1
+    },
+    {
+      "slug": "markdown-parser",
+      "title": "用不到 150 行 JS 写一个 Markdown 解析器",
+      "date": "2026-08-24",
+      "tags": [
+        "前端",
+        "技术"
+      ],
+      "summary": "博客需要在浏览器里把 Markdown 渲染成 HTML，我决定自己写一个够用的解析器。",
+      "words": 401,
+      "minutes": 1
+    },
+    {
+      "slug": "deploy-notes",
+      "title": "GitHub Pages 部署踩坑记：当 git push 走不通时",
+      "date": "2026-08-12",
+      "tags": [
+        "部署",
+        "技术"
+      ],
+      "summary": "网络把 github.com 拦了，git push 用不了。最后我用 REST API 完成了全部部署动作。",
+      "words": 403,
+      "minutes": 1
+    },
+    {
+      "slug": "minimalism",
+      "title": "极简不是少，是不多余",
+      "date": "2026-07-30",
+      "tags": [
+        "设计",
+        "随笔"
+      ],
+      "summary": "做这个站点时反复在删东西，慢慢想明白了一件事：极简主义的重点不在\"少\"。",
+      "words": 315,
+      "minutes": 1
+    }
+  ]
+}

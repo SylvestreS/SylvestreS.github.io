@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>SylvestreS</title>
+    <link>https://sylvestres.github.io/</link>
+    <description>写代码，做设计，记录想法。</description>
+    <language>zh-CN</language>
+    <item>
+      <title>个人主页上线了</title>
+      <link>https://sylvestres.github.io/#/post/hello-world</link>
+      <guid>https://sylvestres.github.io/#/post/hello-world</guid>
+      <pubDate>2026-09-01</pubDate>
+      <description>用纯 JavaScript 做了一个极简黑白的主页，托管在 GitHub Pages 上。</description>
+    </item>
+    <item>
+      <title>用不到 150 行 JS 写一个 Markdown 解析器</title>
+      <link>https://sylvestres.github.io/#/post/markdown-parser</link>
+      <guid>https://sylvestres.github.io/#/post/markdown-parser</guid>
+      <pubDate>2026-08-24</pubDate>
+      <description>博客需要在浏览器里把 Markdown 渲染成 HTML，我决定自己写一个够用的解析器。</description>
+    </item>
+    <item>
+      <title>GitHub Pages 部署踩坑记：当 git push 走不通时</title>
+      <link>https://sylvestres.github.io/#/post/deploy-notes</link>
+      <guid>https://sylvestres.github.io/#/post/deploy-notes</guid>
+      <pubDate>2026-08-12</pubDate>
+      <description>网络把 github.com 拦了，git push 用不了。最后我用 REST API 完成了全部部署动作。</description>
+    </item>
+    <item>
+      <title>极简不是少，是不多余</title>
+      <link>https://sylvestres.github.io/#/post/minimalism</link>
+      <guid>https://sylvestres.github.io/#/post/minimalism</guid>
+      <pubDate>2026-07-30</pubDate>
+      <description>做这个站点时反复在删东西，慢慢想明白了一件事：极简主义的重点不在&quot;少&quot;。</description>
+    </item>
+  </channel>
+</rss>

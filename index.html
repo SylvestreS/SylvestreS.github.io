@@ -4,25 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SylvestreS</title>
-  <meta name="description" content="SylvestreS · 个人主页 · 简介 / 项目 / 动态" />
+  <meta name="description" content="写代码，做设计，记录想法。" />
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="feed.xml" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='Georgia'>S</text></svg>" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="progress" id="progress"></div>
+
   <nav class="nav">
-    <a href="#top" class="nav-logo" id="nav-logo">S.</a>
-    <div class="nav-links" id="nav-links">
-      <a href="#about">简介</a>
-      <a href="#projects">项目</a>
-      <a href="#blog">动态</a>
+    <a href="#/" class="nav-logo">S.</a>
+    <div class="nav-links">
+      <a href="#/">文章</a>
+      <a href="#/archive">归档</a>
+      <a href="#/about">关于</a>
     </div>
-    <button class="theme-toggle" id="theme-toggle" aria-label="切换明暗模式" title="切换明暗模式">
-      <span id="theme-icon">◐</span>
-    </button>
+    <div class="nav-right">
+      <a class="nav-rss" href="feed.xml" title="RSS 订阅">RSS</a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="切换明暗模式" title="切换明暗模式">
+        <span id="theme-icon">◐</span>
+      </button>
+    </div>
   </nav>
 
-  <main id="top">
-    <!-- 各板块由 app.js 渲染 -->
+  <main id="view">
+    <div class="loading">载入中…</div>
   </main>
 
   <footer class="footer" id="footer"></footer>

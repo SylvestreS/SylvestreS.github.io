@@ -1,0 +1,357 @@
+{
+  "updated": "2026-09-02",
+  "annotate_exclude": ["Node"],
+  "terms": [
+    {
+      "term": "Hash",
+      "zh": "哈希",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["哈希值", "散列", "摘要"],
+      "brief": "给任意长度的数据算出的固定长度指纹。",
+      "detail": "具备四个性质：确定性、单向（不可逆推）、雪崩效应（改一个字节结果面目全非）、抗碰撞。区块链用它把区块串成链，使篡改历史必须重算其后所有区块。"
+    },
+    {
+      "term": "Block",
+      "zh": "区块",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["区块"],
+      "brief": "一批被打包在一起、按顺序追加到链上的交易记录。",
+      "detail": "每个区块包含交易列表、时间戳和上一个区块的哈希。比特币约每 10 分钟出一个块，以太坊约每 12 秒。"
+    },
+    {
+      "term": "Merkle Tree",
+      "zh": "默克尔树",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["Merkle Root", "默克尔根"],
+      "brief": "把一个区块内上千笔交易压缩成一个哈希的树状结构。",
+      "detail": "叶子是每笔交易的哈希，两两合并再哈希，逐层向上得到唯一的 Merkle Root。它让轻钱包只需少量数据就能验证某笔交易是否在区块中，无需下载整条链。"
+    },
+    {
+      "term": "Consensus",
+      "zh": "共识机制",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["共识"],
+      "brief": "一群互不信任的节点，就「账本长什么样」达成一致的规则。",
+      "detail": "解决的核心问题是双花：同一笔钱只能花一次。主流实现有 PoW（算力投票）和 PoS（质押投票），本质都是让作恶成本高过收益。"
+    },
+    {
+      "term": "Proof of Work",
+      "zh": "工作量证明",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["PoW", "挖矿"],
+      "brief": "靠消耗算力做题来争夺记账权。",
+      "detail": "节点反复尝试 nonce，直到区块哈希满足难度要求。比特币的方案。安全性来自物理世界的电费——想篡改就得比全网算得更快。常被批评能耗高，但那份能耗正是它的安全预算。"
+    },
+    {
+      "term": "Proof of Stake",
+      "zh": "权益证明",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["PoS", "质押"],
+      "brief": "靠质押代币作为保证金来争夺记账权。",
+      "detail": "验证者锁定代币，作恶会被罚没（Slashing）。以太坊 2022 年 Merge 后采用，能耗下降约 99.95%。代价是要额外处理财富集中、长程攻击等问题。"
+    },
+    {
+      "term": "Node",
+      "zh": "节点",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["全节点", "Full Node"],
+      "brief": "运行区块链软件、保存一份账本副本的计算机。",
+      "detail": "全节点保存并独立验证完整历史，是「去中心化」的实际载体。节点数量少、集中在少数机构手里，去中心化就是空话。"
+    },
+    {
+      "term": "UTXO",
+      "zh": "未花费交易输出",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["UTXO 模型"],
+      "brief": "比特币的记账方式：账本记录的是一笔笔「还没花掉的钱」，而不是账户余额。",
+      "detail": "类似现金——你的余额是所有属于你的零钱之和。好处是天然并行、隐私性较好；坏处是表达复杂状态（如智能合约）很别扭。"
+    },
+    {
+      "term": "Account Model",
+      "zh": "账户模型",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["账户余额模型"],
+      "brief": "以太坊的记账方式：直接记录每个地址的余额，像银行账户。",
+      "detail": "转账就是加减数字，天然适合智能合约表达复杂状态。代价是需要 nonce 防重放，且并行性不如 UTXO。"
+    },
+    {
+      "term": "Smart Contract",
+      "zh": "智能合约",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["合约"],
+      "brief": "部署在链上、满足条件就自动执行的程序。",
+      "detail": "既不智能也不是法律合同，它只是「一旦部署就按代码运行、谁也改不了」的程序。这种不可更改性是优点也是风险——有 bug 也改不掉。"
+    },
+    {
+      "term": "EVM",
+      "zh": "以太坊虚拟机",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["EVM 兼容链"],
+      "brief": "执行智能合约的运行时环境，可以理解为一台全球共享的计算机。",
+      "detail": "每条 EVM 兼容链（以太坊、Arbitrum、Base 等）都实现了这套虚拟机，所以同一份 Solidity 代码能部署到多条链上。"
+    },
+    {
+      "term": "Gas",
+      "zh": "燃料费",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["Gas Fee"],
+      "brief": "在链上执行操作需要支付的计算费用。",
+      "detail": "防止有人写死循环占满网络——每一步计算都要花钱。费用随网络拥堵程度浮动，是「区块空间」这种稀缺资源的价格。"
+    },
+    {
+      "term": "Finality",
+      "zh": "最终性",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["最终确认"],
+      "brief": "一笔交易「不会再被撤销」的保证程度。",
+      "detail": "比特币是概率最终性，确认数越多越安全但理论上永不为零，所以交易所常等 6 个确认。以太坊 PoS 是经济最终性，推翻需销毁海量质押。RWA 结算非常在意这个区别。"
+    },
+    {
+      "term": "51% Attack",
+      "zh": "51% 攻击",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["算力攻击"],
+      "brief": "掌握全网过半算力/质押后，有能力重写近期历史。",
+      "detail": "能做的主要是双花和审查交易，做不出「凭空造币」这类违反协议规则的事。对 PoW 链是采购算力，对 PoS 链是买入代币，后者攻击后资产会被协议惩罚。"
+    },
+    {
+      "term": "Layer 2",
+      "zh": "二层网络",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["L2", "Rollup"],
+      "brief": "在主链之外处理交易、把结果压缩后提交回主链的扩容方案。",
+      "detail": "继承主链的安全性，同时大幅降低成本、提高速度。主流是 Rollup（Optimistic 与 ZK 两大路线）。判断真假 L2 的关键：它是否真的把数据可用性放在主链上。"
+    },
+    {
+      "term": "Double Spending",
+      "zh": "双花",
+      "level": "L1",
+      "track": "blockchain",
+      "aliases": ["双重支付"],
+      "brief": "把同一笔钱同时付给两个人。",
+      "detail": "数字货币最根本的难题——数字文件可以被复制。中心化系统靠服务器排序解决，区块链靠共识机制解决。"
+    },
+    {
+      "term": "Private Key",
+      "zh": "私钥",
+      "level": "L2",
+      "track": "cryptocurrency",
+      "aliases": ["私钥"],
+      "brief": "一串 256 位的随机数，是你对链上资产的唯一控制权。",
+      "detail": "谁持有私钥，谁就能动那个地址的资产。没有挂失，没有找回。取值空间约 1.16 × 10 的 77 次方，穷举猜中在物理上不可行——但泄露、钓鱼、设备中毒才是真实风险。"
+    },
+    {
+      "term": "Address",
+      "zh": "地址",
+      "level": "L2",
+      "track": "cryptocurrency",
+      "aliases": ["公钥", "Public Key", "钱包地址"],
+      "brief": "由公钥哈希得来的公开「账号」，可以安全分享给别人。",
+      "detail": "推导方向是单向的：私钥 → 公钥 → 地址。所以公开地址不会泄露私钥。以太坊地址形如 0x 开头的 40 位十六进制。"
+    },
+    {
+      "term": "Mnemonic",
+      "zh": "助记词",
+      "level": "L2",
+      "track": "cryptocurrency",
+      "aliases": ["助记词", "BIP-39", "种子短语", "Seed Phrase"],
+      "brief": "把私钥的随机数映射成 12 或 24 个英文单词，方便人类抄写。",
+      "detail": "助记词就是私钥本身，只是换了表示法。必须离线手抄、分开存放。任何情况下任何网站向你索要助记词，都是诈骗。"
+    },
+    {
+      "term": "Custody",
+      "zh": "托管",
+      "level": "L2",
+      "track": "cryptocurrency",
+      "aliases": ["托管钱包", "非托管", "Self-custody"],
+      "brief": "资产由第三方代管，还是由你自己保管私钥。",
+      "detail": "托管（交易所）可以找回密码，但你持有的是债权而非资产本身。非托管（自托管）无人能冻结，也无人能帮你找回。Not your keys, not your coins 说的就是这条界线。"
+    },
+    {
+      "term": "Stablecoin",
+      "zh": "稳定币",
+      "level": "L2",
+      "track": "cryptocurrency",
+      "aliases": ["USDC", "USDT", "稳定币"],
+      "brief": "锚定法币价格（通常是 1 美元）的链上代币。",
+      "detail": "三种路线：法币抵押（USDC/USDT）、加密资产超额抵押（DAI）、算法型（UST，2022 年已归零）。风险主要在链下：储备是否真实、托管方是否稳健、赎回是否通畅。"
+    },
+    {
+      "term": "DeFi",
+      "zh": "去中心化金融",
+      "level": "L2",
+      "track": "cryptocurrency",
+      "aliases": ["DeFi"],
+      "brief": "用智能合约搭出来的借贷、交易、衍生品等金融服务。",
+      "detail": "核心特征是无需许可、可组合（乐高式拼接）、链上透明。风险来自合约漏洞、清算机制在极端行情下的连锁反应，以及预言机被操纵。"
+    },
+    {
+      "term": "AMM",
+      "zh": "自动做市商",
+      "level": "L2",
+      "track": "cryptocurrency",
+      "aliases": ["自动做市商", "流动性池"],
+      "brief": "不挂订单簿，而是靠一个资金池和定价公式完成交易。",
+      "detail": "任何人都能往池子里存钱成为做市方，赚手续费。代价是无常损失（Impermanent Loss）——价格波动时，做市方收益可能不如单纯持有。"
+    },
+    {
+      "term": "TVL",
+      "zh": "锁仓总价值",
+      "level": "L2",
+      "track": "cryptocurrency",
+      "aliases": ["Total Value Locked"],
+      "brief": "某个协议里被存入的资产总价值，常用来衡量规模。",
+      "detail": "是个粗糙指标：同一笔钱在多个协议间循环抵押会被重复计算，且随币价波动。看它不如看收入（协议真实赚到的费用）。"
+    },
+    {
+      "term": "Tokenization",
+      "zh": "代币化",
+      "level": "L3",
+      "track": "tokenization",
+      "aliases": ["资产代币化", "通证化"],
+      "brief": "把某项资产或其收益权，转换成区块链上的代币。",
+      "detail": "代码层面非常简单——一个余额表加一个转账函数。全部难点在链下：法律确权、托管、赎回这三件事。"
+    },
+    {
+      "term": "ERC-20",
+      "zh": "同质化代币标准",
+      "level": "L3",
+      "track": "tokenization",
+      "aliases": ["ERC20"],
+      "brief": "以太坊上最通用的可互换代币标准。",
+      "detail": "规定了 balanceOf、transfer、approve 等接口，钱包和交易所因此能无差别支持任意 ERC-20 代币。稳定币、治理代币、基金份额大多用它。"
+    },
+    {
+      "term": "ERC-721",
+      "zh": "非同质化代币",
+      "level": "L3",
+      "track": "tokenization",
+      "aliases": ["NFT", "ERC721"],
+      "brief": "每个代币都有唯一 ID、不可互换的标准。",
+      "detail": "适合表达唯一标的：特定房产的产权凭证、唯一的合约编号。RWA 项目常与 ERC-20 混用——份额用 20，底层凭证用 721。"
+    },
+    {
+      "term": "ERC-3643",
+      "zh": "证券型代币标准",
+      "level": "L3",
+      "track": "tokenization",
+      "aliases": ["ERC-1400", "证券型代币", "Security Token"],
+      "brief": "在代币层面内置合规约束的标准，主要面向受监管证券。",
+      "detail": "关键能力是「受限转账」：转账前自动校验接收方是否在白名单、是否通过 KYC、是否触及持仓上限。它让合规要求变成代码，而不是靠人工审核。"
+    },
+    {
+      "term": "KYC / AML",
+      "zh": "身份认证与反洗钱",
+      "level": "L3",
+      "track": "tokenization",
+      "aliases": ["KYC", "AML", "实名认证"],
+      "brief": "确认客户身份、监控资金来源是洗钱还是非法所得。",
+      "detail": "合规 RWA 项目几乎都必须做。矛盾点在于：链上追求无需许可，监管要求知道参与者是谁。ERC-3643 这类标准正是为了在两者之间找平衡。"
+    },
+    {
+      "term": "Custodian",
+      "zh": "托管人",
+      "level": "L3",
+      "track": "tokenization",
+      "aliases": ["托管方", "Custody"],
+      "brief": "替代币持有人保管链下底层资产的受监管机构。",
+      "detail": "RWA 结构里最核心的信任节点——链上代币越去中心化，链下托管这个单点就越显眼。评估项目第一该问：托管人是谁、受谁监管、能否破产隔离。"
+    },
+    {
+      "term": "Oracle",
+      "zh": "预言机",
+      "level": "L3",
+      "track": "tokenization",
+      "aliases": ["预言机", "Chainlink"],
+      "brief": "把链下数据（价格、净值、天气）搬上链的服务。",
+      "detail": "智能合约无法主动访问互联网，预言机是它获取外部世界的唯一通道。因此预言机本身成了关键风险点——喂价被操纵能直接掏空一个协议。"
+    },
+    {
+      "term": "Whitelist",
+      "zh": "白名单",
+      "level": "L3",
+      "track": "tokenization",
+      "aliases": ["白名单", "Permissioned Transfer", "受限转账"],
+      "brief": "只允许通过审核的地址持有或接收某代币。",
+      "detail": "合规 RWA 项目的基本配置：没通过 KYC 的地址，转账会直接在合约层被拒绝。这也是它与普通 ERC-20 最大的行为差异。"
+    },
+    {
+      "term": "RWA",
+      "zh": "真实世界资产",
+      "level": "L4",
+      "track": "rwa",
+      "aliases": ["Real World Assets", "现实世界资产"],
+      "brief": "把链下存在的资产（国债、房产、基金、信贷）代币化后搬到链上。",
+      "detail": "规模最大的 RWA 其实是稳定币——它就是代币化的美元存款。除此之外主要是代币化国债与货币市场基金，因为这类资产标准化程度高、估值清晰、法律结构成熟。"
+    },
+    {
+      "term": "NAV",
+      "zh": "净资产价值",
+      "level": "L4",
+      "track": "rwa",
+      "aliases": ["Net Asset Value", "净值"],
+      "brief": "基金总资产减去总负债后，分摊到每份份额的价值。",
+      "detail": "代币化基金的赎回定价基准。关键问题是谁来算、多久算一次、链上价格如何与 NAV 对齐。二级市场价格长期偏离 NAV 时，靠申购赎回套利来收敛。"
+    },
+    {
+      "term": "SPV",
+      "zh": "特殊目的载体",
+      "level": "L4",
+      "track": "rwa",
+      "aliases": ["Special Purpose Vehicle", "特殊目的公司"],
+      "brief": "为持有某项特定资产而单独设立的法律实体。",
+      "detail": "RWA 的标准结构：资产装进 SPV，代币代表对 SPV 的权益。目的是破产隔离——即便原始资产方倒闭，SPV 里的资产也不被波及。"
+    },
+    {
+      "term": "Bankruptcy Remoteness",
+      "zh": "破产隔离",
+      "level": "L4",
+      "track": "rwa",
+      "aliases": ["破产隔离", "真实出售", "True Sale"],
+      "brief": "让资产在法律上与发起人的破产风险切割开来。",
+      "detail": "靠 SPV 结构 + 真实出售（True Sale）实现。这是判断一个 RWA 项目结构是否扎实的硬指标——没有破产隔离，代币持有人就只是普通无担保债权人。"
+    },
+    {
+      "term": "Redemption",
+      "zh": "赎回",
+      "level": "L4",
+      "track": "rwa",
+      "aliases": ["赎回机制", "申赎"],
+      "brief": "把代币换回底层资产或现金的通道。",
+      "detail": "RWA 最真实的瓶颈：链上交易可以秒级结算，赎回却受银行营业时间、基金申赎窗口、跨境转账约束。要看清三点——频率（随时还是窗口期）、定价（按 NAV 还是市价）、失效场景（托管出问题时还在不在）。"
+    },
+    {
+      "term": "Permissioned Pool",
+      "zh": "许可池",
+      "level": "L4",
+      "track": "rwa",
+      "aliases": ["许可池", "Qualified Investor Fund"],
+      "brief": "仅对通过资格审核的投资者开放的代币化基金。",
+      "detail": "绝大多数合规 RWA 产品都是许可池形式，因为它们面向合格投资者。代价是牺牲了可转让性——这也是「链上流动性」和「证券合规」之间当前最主要的一道折衷。"
+    },
+    {
+      "term": "Tokenized Treasury",
+      "zh": "代币化国债",
+      "level": "L4",
+      "track": "rwa",
+      "aliases": ["代币化国债", "代币化货币市场基金"],
+      "brief": "把短期美国国债或货币市场基金份额做成链上代币。",
+      "detail": "目前 RWA 里规模最大的品类。原因很实际：收益率有锚、估值清晰、法律结构简单、机构需求真实。它是「RWA 能不能跑通」最好的试验田。"
+    }
+  ]
+}

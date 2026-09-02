@@ -6,32 +6,46 @@
     <description>写代码，做设计，记录想法。</description>
     <language>zh-CN</language>
     <item>
-      <title>个人主页上线了</title>
-      <link>https://sylvestres.github.io/#/post/hello-world</link>
-      <guid>https://sylvestres.github.io/#/post/hello-world</guid>
+      <title>区块链到底是什么：从一本共享账本说起</title>
+      <link>https://sylvestres.github.io/#/post/what-is-blockchain</link>
+      <guid>https://sylvestres.github.io/#/post/what-is-blockchain</guid>
+      <pubDate>2026-09-02</pubDate>
+      <description>先别管比特币。区块链本质上只是一本「谁都有一份完整副本、且改起来代价极高」的账本。</description>
+    </item>
+    <item>
+      <title>哈希与「不可篡改」：改动一个字节会发生什么</title>
+      <link>https://sylvestres.github.io/#/post/hash-and-immutability</link>
+      <guid>https://sylvestres.github.io/#/post/hash-and-immutability</guid>
       <pubDate>2026-09-01</pubDate>
-      <description>用纯 JavaScript 做了一个极简黑白的主页，托管在 GitHub Pages 上。</description>
+      <description>「不可篡改」不是魔法，是哈希函数加上一个很朴素的技巧：让每一页账目都记住上一页的指纹。</description>
     </item>
     <item>
-      <title>用不到 150 行 JS 写一个 Markdown 解析器</title>
-      <link>https://sylvestres.github.io/#/post/markdown-parser</link>
-      <guid>https://sylvestres.github.io/#/post/markdown-parser</guid>
-      <pubDate>2026-08-24</pubDate>
-      <description>博客需要在浏览器里把 Markdown 渲染成 HTML，我决定自己写一个够用的解析器。</description>
+      <title>共识机制：谁有资格封下一页账本</title>
+      <link>https://sylvestres.github.io/#/post/consensus-pow-pos</link>
+      <guid>https://sylvestres.github.io/#/post/consensus-pow-pos</guid>
+      <pubDate>2026-08-30</pubDate>
+      <description>如果人人都能记账，谁来拍板？PoW 用算力投票，PoS 用押金投票——它们买的是同一件东西：作恶的成本。</description>
     </item>
     <item>
-      <title>GitHub Pages 部署踩坑记：当 git push 走不通时</title>
-      <link>https://sylvestres.github.io/#/post/deploy-notes</link>
-      <guid>https://sylvestres.github.io/#/post/deploy-notes</guid>
-      <pubDate>2026-08-12</pubDate>
-      <description>网络把 github.com 拦了，git push 用不了。最后我用 REST API 完成了全部部署动作。</description>
+      <title>私钥、助记词与钱包：你其实不「拥有」任何币</title>
+      <link>https://sylvestres.github.io/#/post/keys-wallets</link>
+      <guid>https://sylvestres.github.io/#/post/keys-wallets</guid>
+      <pubDate>2026-08-28</pubDate>
+      <description>币从来不在你的钱包里，它们一直在链上。你的钱包里只有一把钥匙——弄丢钥匙和弄丢币，是同一件事。</description>
     </item>
     <item>
-      <title>极简不是少，是不多余</title>
-      <link>https://sylvestres.github.io/#/post/minimalism</link>
-      <guid>https://sylvestres.github.io/#/post/minimalism</guid>
-      <pubDate>2026-07-30</pubDate>
-      <description>做这个站点时反复在删东西，慢慢想明白了一件事：极简主义的重点不在&quot;少&quot;。</description>
+      <title>稳定币：加密世界和现实货币的接口（也是 RWA 的第一课）</title>
+      <link>https://sylvestres.github.io/#/post/stablecoins</link>
+      <guid>https://sylvestres.github.io/#/post/stablecoins</guid>
+      <pubDate>2026-08-25</pubDate>
+      <description>一枚 USDC 本质上是「代币化的一美元银行存款」。搞懂稳定币，RWA 的一半你已经懂了。</description>
+    </item>
+    <item>
+      <title>代币化入门：把现实资产搬上链，难点不在技术</title>
+      <link>https://sylvestres.github.io/#/post/what-is-tokenization</link>
+      <guid>https://sylvestres.github.io/#/post/what-is-tokenization</guid>
+      <pubDate>2026-08-22</pubDate>
+      <description>代币化的代码只有十几行，难的是另外三件事：法律上到底确权给了谁、资产由谁保管、持有人怎么赎回。</description>
     </item>
   </channel>
 </rss>

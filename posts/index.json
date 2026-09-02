@@ -1,52 +1,88 @@
 {
   "posts": [
     {
-      "slug": "hello-world",
-      "title": "个人主页上线了",
+      "slug": "what-is-blockchain",
+      "title": "区块链到底是什么：从一本共享账本说起",
+      "date": "2026-09-02",
+      "tags": [
+        "区块链",
+        "基础概念"
+      ],
+      "summary": "先别管比特币。区块链本质上只是一本「谁都有一份完整副本、且改起来代价极高」的账本。",
+      "words": 1124,
+      "minutes": 3,
+      "level": "L1",
+      "track": "blockchain"
+    },
+    {
+      "slug": "hash-and-immutability",
+      "title": "哈希与「不可篡改」：改动一个字节会发生什么",
       "date": "2026-09-01",
       "tags": [
-        "随笔",
-        "前端"
+        "区块链",
+        "基础概念"
       ],
-      "summary": "用纯 JavaScript 做了一个极简黑白的主页，托管在 GitHub Pages 上。",
-      "words": 271,
-      "minutes": 1
+      "summary": "「不可篡改」不是魔法，是哈希函数加上一个很朴素的技巧：让每一页账目都记住上一页的指纹。",
+      "words": 1134,
+      "minutes": 3,
+      "level": "L1",
+      "track": "blockchain"
     },
     {
-      "slug": "markdown-parser",
-      "title": "用不到 150 行 JS 写一个 Markdown 解析器",
-      "date": "2026-08-24",
+      "slug": "consensus-pow-pos",
+      "title": "共识机制：谁有资格封下一页账本",
+      "date": "2026-08-30",
       "tags": [
-        "前端",
-        "技术"
+        "区块链",
+        "基础概念"
       ],
-      "summary": "博客需要在浏览器里把 Markdown 渲染成 HTML，我决定自己写一个够用的解析器。",
-      "words": 401,
-      "minutes": 1
+      "summary": "如果人人都能记账，谁来拍板？PoW 用算力投票，PoS 用押金投票——它们买的是同一件东西：作恶的成本。",
+      "words": 1127,
+      "minutes": 3,
+      "level": "L1",
+      "track": "blockchain"
     },
     {
-      "slug": "deploy-notes",
-      "title": "GitHub Pages 部署踩坑记：当 git push 走不通时",
-      "date": "2026-08-12",
+      "slug": "keys-wallets",
+      "title": "私钥、助记词与钱包：你其实不「拥有」任何币",
+      "date": "2026-08-28",
       "tags": [
-        "部署",
-        "技术"
+        "加密货币",
+        "基础概念"
       ],
-      "summary": "网络把 github.com 拦了，git push 用不了。最后我用 REST API 完成了全部部署动作。",
-      "words": 403,
-      "minutes": 1
+      "summary": "币从来不在你的钱包里，它们一直在链上。你的钱包里只有一把钥匙——弄丢钥匙和弄丢币，是同一件事。",
+      "words": 1039,
+      "minutes": 3,
+      "level": "L2",
+      "track": "cryptocurrency"
     },
     {
-      "slug": "minimalism",
-      "title": "极简不是少，是不多余",
-      "date": "2026-07-30",
+      "slug": "stablecoins",
+      "title": "稳定币：加密世界和现实货币的接口（也是 RWA 的第一课）",
+      "date": "2026-08-25",
       "tags": [
-        "设计",
-        "随笔"
+        "加密货币",
+        "代币化"
       ],
-      "summary": "做这个站点时反复在删东西，慢慢想明白了一件事：极简主义的重点不在\"少\"。",
-      "words": 315,
-      "minutes": 1
+      "summary": "一枚 USDC 本质上是「代币化的一美元银行存款」。搞懂稳定币，RWA 的一半你已经懂了。",
+      "words": 1119,
+      "minutes": 3,
+      "level": "L2",
+      "track": "cryptocurrency"
+    },
+    {
+      "slug": "what-is-tokenization",
+      "title": "代币化入门：把现实资产搬上链，难点不在技术",
+      "date": "2026-08-22",
+      "tags": [
+        "代币化",
+        "RWA"
+      ],
+      "summary": "代币化的代码只有十几行，难的是另外三件事：法律上到底确权给了谁、资产由谁保管、持有人怎么赎回。",
+      "words": 1160,
+      "minutes": 3,
+      "level": "L3",
+      "track": "tokenization"
     }
   ]
 }

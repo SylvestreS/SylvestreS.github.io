@@ -1,0 +1,58 @@
+{
+  "updated": "2026-09-02",
+  "note": "自下而上：L1 解决「记录改不动」，L2 解决「钱怎么流通」，L3 解决「资产怎么上链」，L4 解决「合规与现实怎么落地」。",
+  "levels": [
+    {
+      "id": "L1",
+      "title": "Blockchain",
+      "zh": "区块链",
+      "desc": "底层地基。回答两个问题：数据为什么改不动？一群互不信任的人怎么达成一致？"
+    },
+    {
+      "id": "L2",
+      "title": "Cryptocurrency",
+      "zh": "加密货币",
+      "desc": "原生应用。私钥、钱包、稳定币、市场机制——链上价值是怎么被持有和转移的。"
+    },
+    {
+      "id": "L3",
+      "title": "Tokenization",
+      "zh": "资产代币化",
+      "desc": "技术手段。把链下权利映射成链上代币，重点不在代码，在法律、托管与赎回。"
+    },
+    {
+      "id": "L4",
+      "title": "RWA",
+      "zh": "真实世界资产",
+      "desc": "落地场景。国债、基金、房地产如何上链，以及合规、估值、清算这些真正的难点。"
+    }
+  ],
+  "items": [
+    { "id": "l1-1", "level": "L1", "title": "分布式账本与「去中心化」到底指什么", "post": "what-is-blockchain" },
+    { "id": "l1-2", "level": "L1", "title": "哈希函数与不可篡改性", "post": "hash-and-immutability" },
+    { "id": "l1-3", "level": "L1", "title": "区块结构与 Merkle 树", "note": "待写" },
+    { "id": "l1-4", "level": "L1", "title": "共识机制：PoW 与 PoS", "post": "consensus-pow-pos" },
+    { "id": "l1-5", "level": "L1", "title": "智能合约与 EVM", "note": "待写" },
+    { "id": "l1-6", "level": "L1", "title": "Gas、交易费与区块空间", "note": "待写" },
+
+    { "id": "l2-1", "level": "L2", "title": "私钥、公钥与地址", "post": "keys-wallets" },
+    { "id": "l2-2", "level": "L2", "title": "钱包类型：热钱包 / 冷钱包 / 托管与非托管", "post": "keys-wallets" },
+    { "id": "l2-3", "level": "L2", "title": "比特币：UTXO 模型与减半", "note": "待写" },
+    { "id": "l2-4", "level": "L2", "title": "以太坊：账户模型与状态机", "note": "待写" },
+    { "id": "l2-5", "level": "L2", "title": "稳定币：法币抵押 / 超额抵押 / 算法型", "post": "stablecoins" },
+    { "id": "l2-6", "level": "L2", "title": "交易所、流动性与市场机制", "note": "待写" },
+
+    { "id": "l3-1", "level": "L3", "title": "代币化的一般结构：链下资产 → 链上代币", "post": "what-is-tokenization" },
+    { "id": "l3-2", "level": "L3", "title": "ERC-20：同质化代币与所有权表达", "note": "待写" },
+    { "id": "l3-3", "level": "L3", "title": "ERC-721 与 ERC-1155：非同质化与混合标准", "note": "待写" },
+    { "id": "l3-4", "level": "L3", "title": "证券型代币：ERC-1400 / ERC-3643", "note": "待写" },
+    { "id": "l3-5", "level": "L3", "title": "合规层：KYC / AML / 白名单受限转账", "note": "待写" },
+    { "id": "l3-6", "level": "L3", "title": "预言机：链下数据如何上链", "note": "待写" },
+
+    { "id": "l4-1", "level": "L4", "title": "RWA 全景：规模、品类与为什么是现在", "note": "待写" },
+    { "id": "l4-2", "level": "L4", "title": "代币化国债与货币市场基金", "note": "待写" },
+    { "id": "l4-3", "level": "L4", "title": "房地产与私募基金代币化", "note": "待写" },
+    { "id": "l4-4", "level": "L4", "title": "估值、NAV 与预言机喂价", "note": "待写" },
+    { "id": "l4-5", "level": "L4", "title": "赎回、清算与法律结构（SPV / 破产隔离）", "note": "待写" }
+  ]
+}

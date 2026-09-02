@@ -1,14 +1,15 @@
 /* ============================================================
-   SylvestreS · 纯 JS 博客
+   SylvestreS · 区块链 / 代币化 / RWA 学习笔记
    没有框架，没有构建步骤。写 Markdown → 推到 GitHub → 自动上线
    ============================================================ */
 
 const SITE = {
   name: "SylvestreS",
-  tagline: "写代码，做设计，记录想法。",
+  tagline: "区块链 · 加密货币 · 代币化 · RWA —— 一条自下而上的学习路径",
   about: [
-    "你好，我是 SylvestreS。这里放我写的东西——关于代码、设计，以及一些还没想清楚的想法。",
-    "这个站点没有框架，也没有构建步骤：文章是 Markdown 文件，浏览器打开时现场解析渲染。",
+    "这是一个公开的学习笔记站。我从零开始啃区块链，一路记到资产代币化和 RWA，笔记按 L1–L4 分级挂在「路径」页上。",
+    "写下来的目的很单纯：学过就忘，所以把理解落成文字。写得不对的地方，等学到后面再回来改。",
+    "站点是纯手写的 HTML/CSS/JS，没有框架、没有构建步骤——文章是 Markdown 文件，浏览器打开时现场渲染。",
   ],
   location: "地球 · 东八区",
   links: [
@@ -18,7 +19,8 @@ const SITE = {
   // 从 GitHub 实时拉取仓库（设为 false 关闭）
   liveRepos: true,
   repoCount: 6,
-  footerText: "© 2026 · 手写于编辑器，托管于 GitHub Pages",
+  disclaimer: "本站是个人学习笔记，不是投资建议。写错的地方我自己负责。",
+  footerText: "© 2026 SylvestreS · 学习笔记，不构成投资建议",
 };
 
 const $ = (sel, el = document) => el.querySelector(sel);
@@ -203,6 +205,7 @@ const postCard = (p) => `
       <time>${p.date}</time>
       <span class="dot">·</span>
       <span>${p.minutes} 分钟</span>
+      ${lvBadge(p.level)}
       ${p.tags.map((t) => `<span class="chip">${t}</span>`).join("")}
     </div>
     <h2 class="post-title">${p.title}</h2>
@@ -294,6 +297,7 @@ async function viewPost(slug) {
 
   document.querySelectorAll("pre.code").forEach(setupCodeBlock);
   document.title = `${meta.title} · ${SITE.name}`;
+  await annotateTerms();
   observeReveals();
 }
 
@@ -331,6 +335,7 @@ async function viewAbout() {
       <div class="about-card">
         <h3>${SITE.name}</h3>
         ${SITE.about.map((p) => `<p>${p}</p>`).join("")}
+        <p class="disc-box">${SITE.disclaimer}</p>
         <p class="muted">${SITE.location}</p>
         <div class="hero-links">
           ${SITE.links.map((l) =>
@@ -344,6 +349,295 @@ async function viewAbout() {
   loadLiveRepos();
 }
 
+/* ============ 术语词典：数据、正文标注、悬停释义 ============ */
+
+let GLOSSARY = [];
+let TERM_KEYS = [];
+let TERM_MAP = new Map();
+
+async function loadGlossary() {
+  if (GLOSSARY.length) return GLOSSARY;
+  let payload = {};
+  try {
+    const res = await fetch("data/glossary.json");
+    payload = await res.json();
+    GLOSSARY = payload.terms || [];
+  } catch {
+    GLOSSARY = [];
+  }
+  // 像 "Node" 这种通用英文单词不参与正文自动标注，否则会误伤无关句子
+  const exclude = new Set((payload.annotate_exclude || []).map((s) => s.toLowerCase()));
+  TERM_MAP = new Map();
+  GLOSSARY.forEach((t) => {
+    [t.term, t.zh, ...(t.aliases || [])].forEach((k) => {
+      if (k && !exclude.has(k.toLowerCase())) TERM_MAP.set(k.toLowerCase(), t);
+    });
+  });
+  TERM_KEYS = [...TERM_MAP.keys()].sort((a, b) => b.length - a.length);
+  return GLOSSARY;
+}
+
+const reEscape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const cssId = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
+function ensureTip() {
+  let tip = document.getElementById("gtip");
+  if (!tip) {
+    tip = document.createElement("div");
+    tip.id = "gtip";
+    tip.className = "gtip";
+    document.body.appendChild(tip);
+  }
+  return tip;
+}
+
+/** 给正文里出现的术语加虚下划线（跳过代码与链接内部） */
+async function annotateTerms() {
+  const root = document.querySelector(".prose");
+  if (!root) return;
+  await loadGlossary();
+  if (!TERM_KEYS.length) return;
+
+  const re = new RegExp("(" + TERM_KEYS.map(reEscape).join("|") + ")", "gi");
+  const skip = new Set(["CODE", "PRE", "A", "SCRIPT", "STYLE"]);
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(n) {
+      if (!n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+      let p = n.parentElement;
+      while (p && p !== root) {
+        if (skip.has(p.tagName)) return NodeFilter.FILTER_REJECT;
+        p = p.parentElement;
+      }
+      return NodeFilter.FILTER_ACCEPT;
+    },
+  });
+
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  nodes.forEach((node) => {
+    const text = node.nodeValue;
+    re.lastIndex = 0;
+    if (!re.test(text)) return;
+    re.lastIndex = 0;
+
+    const frag = document.createDocumentFragment();
+    let last = 0;
+    let m;
+    while ((m = re.exec(text))) {
+      const entry = TERM_MAP.get(m[0].toLowerCase());
+      if (!entry) continue;
+      if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+      const span = document.createElement("span");
+      span.className = "term";
+      span.textContent = m[0];
+      span.dataset.term = entry.term;
+      frag.appendChild(span);
+      last = m.index + m[0].length;
+    }
+    if (!last) return;
+    if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  });
+}
+
+function initGlossaryTip() {
+  const tip = ensureTip();
+  let hideTimer = null;
+
+  document.addEventListener("mouseover", (e) => {
+    const el = e.target.closest && e.target.closest(".term");
+    if (!el) return;
+    const entry = GLOSSARY.find((t) => t.term === el.dataset.term);
+    if (!entry) return;
+    clearTimeout(hideTimer);
+    tip.innerHTML =
+      `<div class="gtip-head"><b>${entry.zh}</b>` +
+      `<span>${entry.term}</span>${lvBadge(entry.level)}</div>` +
+      `<p>${entry.brief}</p>`;
+    tip.classList.add("show");
+    const r = el.getBoundingClientRect();
+    const tw = tip.offsetWidth;
+    const maxLeft = document.documentElement.clientWidth - tw - 16;
+    tip.style.left = Math.max(12, Math.min(r.left + scrollX, maxLeft)) + "px";
+    tip.style.top = r.bottom + scrollY + 8 + "px";
+  });
+
+  document.addEventListener("mouseout", (e) => {
+    if (e.target.closest && e.target.closest(".term")) {
+      hideTimer = setTimeout(() => tip.classList.remove("show"), 200);
+    }
+  });
+  tip.addEventListener("mouseover", () => clearTimeout(hideTimer));
+  tip.addEventListener("mouseout", () => tip.classList.remove("show"));
+
+  // 点击术语跳到词典对应条目
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest && e.target.closest(".term");
+    if (el) location.hash = `#/glossary/${encodeURIComponent(el.dataset.term)}`;
+  });
+}
+
+async function viewGlossary(focus) {
+  const terms = await loadGlossary();
+  const levels = ["L1", "L2", "L3", "L4"];
+  let lv = "";
+
+  view().innerHTML = `
+    <section class="hero-sm">
+      <h1>术语词典</h1>
+      <p class="tagline">${terms.length} 个词条 · 笔记正文里的术语带虚下划线，悬停即可查看，点击跳到完整条目</p>
+      <div class="search-row">
+        <input id="gsearch" type="search" placeholder="搜索术语或别名…" autocomplete="off" />
+        <div class="tagbar" id="glevels">
+          <button type="button" class="tag on" data-lv="">全部</button>
+          ${levels.map((l) =>
+            `<button type="button" class="tag" data-lv="${l}">${l}</button>`).join("")}
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">词条 · <span id="gcount">0</span></h2>
+      <div class="gloss-list" id="gloss-list"></div>
+      <p class="empty" id="gempty" style="display:none">没有匹配的术语。</p>
+    </section>`;
+
+  const render = () => {
+    const q = $("#gsearch").value.trim().toLowerCase();
+    const list = terms.filter((t) => {
+      if (lv && t.level !== lv) return false;
+      if (!q) return true;
+      return [t.term, t.zh, ...(t.aliases || []), t.brief, t.detail]
+        .join(" ").toLowerCase().includes(q);
+    });
+    $("#gloss-list").innerHTML = list.map((t) => `
+      <div class="gloss-item" id="g-${cssId(t.term)}">
+        <div class="gloss-head">${lvBadge(t.level)}
+          <h3>${t.zh}<span class="gloss-en">${t.term}</span></h3>
+        </div>
+        <p class="gloss-brief">${t.brief}</p>
+        <p class="gloss-detail">${t.detail}</p>
+        ${(t.aliases || []).length
+          ? `<div class="gloss-alias">也称作 ${t.aliases.join(" · ")}</div>` : ""}
+      </div>`).join("");
+    $("#gcount").textContent = list.length;
+    $("#gempty").style.display = list.length ? "none" : "block";
+  };
+
+  $("#gsearch").addEventListener("input", render);
+  $("#glevels").addEventListener("click", (e) => {
+    const btn = e.target.closest("button.tag");
+    if (!btn) return;
+    lv = btn.dataset.lv;
+    $("#glevels").querySelectorAll(".tag").forEach((b) => b.classList.toggle("on", b === btn));
+    render();
+  });
+  render();
+
+  if (focus) {
+    const el = document.getElementById("g-" + cssId(focus));
+    if (el) { el.classList.add("focus"); scrollTo({ top: el.offsetTop - 100 }); }
+  }
+}
+
+/* ============ 学习路径 ============ */
+
+const RM_KEY = "roadmap-progress-v1";
+let RM = null;
+
+function rmSave() {
+  try { localStorage.setItem(RM_KEY, JSON.stringify(RM.prog)); } catch {}
+}
+
+function rmRefresh() {
+  const n = RM.items.filter((it) => RM.prog[it.id]).length;
+  const done = $("#rm-done");
+  const fill = $("#rm-fill");
+  if (done) done.textContent = n;
+  if (fill) fill.style.width = (n / RM.items.length * 100).toFixed(1) + "%";
+  document.querySelectorAll(".rm-block").forEach((block) => {
+    const list = RM.items.filter((it) => it.level === block.dataset.lv);
+    const sub = block.querySelector(".rm-sub");
+    if (sub) sub.textContent = `${list.filter((it) => RM.prog[it.id]).length}/${list.length}`;
+  });
+}
+
+async function viewRoadmap() {
+  let data;
+  try {
+    const res = await fetch("data/roadmap.json");
+    data = await res.json();
+  } catch {
+    view().innerHTML = `
+      <section class="hero-sm">
+        <h1>404</h1>
+        <p class="tagline">学习路径数据加载失败。</p>
+      </section>`;
+    return;
+  }
+
+  const items = data.items || [];
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(RM_KEY)); } catch {}
+  // 首次访问：已有笔记的知识点自动勾选，之后完全交给用户自己维护
+  if (!saved || typeof saved !== "object") {
+    saved = {};
+    items.forEach((it) => { if (it.post) saved[it.id] = true; });
+  }
+  RM = { items, levels: data.levels || [], prog: saved };
+  rmSave();
+
+  view().innerHTML = `
+    <section class="hero-sm">
+      <h1>学习路径</h1>
+      <p class="tagline">${data.note}</p>
+      <div class="rm-bar"><div class="rm-fill" id="rm-fill"></div></div>
+      <p class="rm-count"><b id="rm-done">0</b> / ${items.length} 个知识点
+        · 勾选状态只存在你自己的浏览器里</p>
+    </section>
+
+    ${RM.levels.map((L) => {
+      const list = items.filter((it) => it.level === L.id);
+      const n = list.filter((it) => RM.prog[it.id]).length;
+      return `
+        <section class="rm-block" data-lv="${L.id}">
+          <h2 class="section-title">${lvBadge(L.id)} ${L.zh} · ${L.title}
+            <span class="rm-sub">${n}/${list.length}</span></h2>
+          <p class="rm-desc">${L.desc}</p>
+          <ul class="rm-list">
+            ${list.map((it) => `
+              <li class="rm-item ${RM.prog[it.id] ? "done" : ""}">
+                <button class="rm-check" type="button" data-id="${it.id}"
+                        aria-pressed="${RM.prog[it.id] ? "true" : "false"}"
+                        aria-label="标记完成">${RM.prog[it.id] ? "✓" : ""}</button>
+                <span class="rm-title">${it.title}</span>
+                ${it.post
+                  ? `<a class="rm-link" href="#/post/${it.post}">笔记 →</a>`
+                  : `<span class="rm-todo">待写</span>`}
+              </li>`).join("")}
+          </ul>
+        </section>`;
+    }).join("")}`;
+
+  rmRefresh();
+}
+
+function initRoadmapClicks() {
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".rm-check");
+    if (!btn || !RM) return;
+    const id = btn.dataset.id;
+    const on = !RM.prog[id];
+    RM.prog[id] = on;
+    btn.textContent = on ? "✓" : "";
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.closest(".rm-item").classList.toggle("done", on);
+    rmSave();
+    rmRefresh();
+  });
+}
+
 /* ============ 路由 ============ */
 
 async function router() {
@@ -352,6 +646,8 @@ async function router() {
 
   if (!seg) return viewHome();
   if (seg === "post" && arg) return viewPost(decodeURIComponent(arg));
+  if (seg === "roadmap") return viewRoadmap();
+  if (seg === "glossary") return viewGlossary(arg ? decodeURIComponent(arg) : "");
   if (seg === "archive") return viewArchive();
   if (seg === "about") return viewAbout();
   if (seg === "tag" && arg) return viewHome(decodeURIComponent(arg));

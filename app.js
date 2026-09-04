@@ -199,6 +199,13 @@ function tagBar(active) {
   </div>`;
 }
 
+/**
+ * L1–L4 分级徽章。首页列表 / 词典 / 路径页 / 术语悬停卡共用。
+ * 之前这个函数漏写了，导致这四处渲染时抛 ReferenceError（页面白屏）。
+ */
+const lvBadge = (lv) =>
+  lv ? `<span class="lv" data-lv="${lv}">${String(lv).toUpperCase()}</span>` : "";
+
 const postCard = (p) => `
   <a class="post-item reveal" href="#/post/${p.slug}">
     <div class="post-meta">
@@ -441,7 +448,10 @@ async function annotateTerms() {
   });
 }
 
+let tipBound = false;
 function initGlossaryTip() {
+  if (tipBound) return; // 幂等：重复绑定会让一次点击被处理两遍，效果互相抵消
+  tipBound = true;
   const tip = ensureTip();
   let hideTimer = null;
 
@@ -623,7 +633,10 @@ async function viewRoadmap() {
   rmRefresh();
 }
 
+let rmBound = false;
 function initRoadmapClicks() {
+  if (rmBound) return; // 幂等：重复绑定会让一次点击切换两次，看起来像没反应
+  rmBound = true;
   document.addEventListener("click", (e) => {
     const btn = e.target.closest(".rm-check");
     if (!btn || !RM) return;
@@ -755,6 +768,10 @@ addEventListener("hashchange", navigate);
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   initProgress();
+  // 这两个是全局事件委托，整个生命周期只需绑定一次
+  // （漏掉就会导致：路径页勾选无反应、正文术语悬停无释义）
+  initRoadmapClicks();
+  initGlossaryTip();
   $("#footer").innerHTML = `
     <span>${SITE.footerText}</span>
     <span><a href="#/">↑ 回到顶部</a></span>`;

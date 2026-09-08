@@ -417,6 +417,27 @@ body {
 .key.dual {
   padding: 5px 3px;
 }
+
+/* 功能键栏：可换行 flex 容器 */
+.kp-extra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center;
+}
+.kp-extra .fn {
+  flex: 0 0 auto;
+  min-width: 40px;
+  padding: 7px 9px;
+  font-size: 13px;
+}
+.kp-extra .fn.dual { padding: 5px 9px; }
+.kp-extra .fn.sym { color: #b8d8f0; }
+.kp-extra .fn.clear {
+  background: linear-gradient(180deg, #b85040 0%, #883a2a 100%);
+  color: #fff;
+  font-weight: 700;
+}
 .key.dual .main { font-size: 14px; font-weight: 700; color: #f0f0f2; line-height: 1; }
 .key.dual .lbl2 { font-size: 9px;  color: #6fb3d9; font-weight: 600; margin-top: 2px; }
 .key.dual .lbl2 sup { font-size: 7px; }

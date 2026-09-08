@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BA II PLUS 金融计算器 · SylvestreS</title>
+<meta name="description" content="浏览器里的 TI BA II PLUS 模拟器：TVM、现金流 NPV/IRR、摊销、债券，按键与真机一致。" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="site-head">
+  <a class="back" href="../#/">← 返回笔记站</a>
+  <h1>BA II PLUS 模拟器</h1>
+  <p class="sub">TVM · 现金流 · 摊销 · 债券。鼠标点击按键，也可以直接用键盘。</p>
+</header>
+
+<main class="wrap">
+
+  <div class="calc" id="calc">
+    <div class="brand">
+      <div class="brand-row">
+        <span class="brand-model"><b>BAII</b><i> Plus</i></span>
+      </div>
+      <div class="brand-row brand-ti">
+        <!-- 德州仪器 Texas state 标志 -->
+        <svg class="ti-mark" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M2 4 L22 4 L19 9 L22 9 L15 21 L13 14 L11 14 L9 21 L2 9 L5 9 Z"
+                fill="#c9c4b8" stroke="none"/>
+        </svg>
+        <span class="brand-name">TEXAS INSTRUMENTS</span>
+      </div>
+    </div>
+
+    <div class="screen" id="screen">
+      <div class="indicators">
+        <span class="ind" data-ind="2nd">2nd</span>
+        <span class="ind" data-ind="cpt">CPT</span>
+        <span class="ind" data-ind="bgn">BGN</span>
+        <span class="ind" data-ind="set">SET</span>
+        <span class="ind" data-ind="ins">INS</span>
+        <span class="ind" data-ind="del">DEL</span>
+        <span class="ind" data-ind="hypoth">HYP</span>
+        <span class="ind" data-ind="err">ERROR</span>
+      </div>
+      <div class="lcd">
+        <span class="lcd-label" id="lcd-label"></span>
+        <span class="lcd-value" id="lcd-value">0</span>
+      </div>
+      <div class="lcd-foot">BUSINESS ANALYST</div>
+    </div>
+
+    <div class="keypad" id="keypad"></div>
+  </div>
+
+  <aside class="panels">
+    <section class="panel">
+      <h2>当前寄存器</h2>
+      <div class="regs" id="regs"></div>
+      <div class="panel-note" id="cf-view"></div>
+    </section>
+
+    <section class="panel">
+      <h2>怎么用</h2>
+      <ol class="howto">
+        <li><b>先输数字，再按变量键。</b> 例如 <code>360 N</code>、<code>6.5 I/Y</code>。</li>
+        <li><b>CPT 后按未知量。</b> 已知四个量，<code>CPT PMT</code> 求第五个。</li>
+        <li><b>2nd 触发键上方的黄字功能。</b> 如 <code>2nd FV</code> = CLR TVM。</li>
+        <li><b>符号即方向。</b> 收到的钱为正，付出的钱为负。</li>
+      </ol>
+    </section>
+
+    <section class="panel">
+      <h2>键盘快捷键</h2>
+      <div class="keys-help">
+        <div><kbd>0</kbd>–<kbd>9</kbd> <kbd>.</kbd> 数字</div>
+        <div><kbd>+</kbd> <kbd>-</kbd> <kbd>*</kbd> <kbd>/</kbd> 四则</div>
+        <div><kbd>Enter</kbd> 确认 / <kbd>Esc</kbd> 清除</div>
+        <div><kbd>Backspace</kbd> 退格</div>
+        <div><kbd>↑</kbd> <kbd>↓</kbd> 切换工作表字段</div>
+        <div><kbd>S</kbd> 按下 2nd 键</div>
+        <div><kbd>N</kbd> 变号 +/−</div>
+      </div>
+    </section>
+  </aside>
+
+</main>
+
+<footer class="site-foot">
+  <span>© 2026 SylvestreS · 爱好者实现，与 Texas Instruments 无关</span>
+  <span>仅供学习，计算结果请自行复核</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

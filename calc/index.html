@@ -18,12 +18,18 @@
 <main class="wrap">
 
   <div class="calc" id="calc">
-    <div class="calc-top">
-      <div class="brand">
-        <span class="brand-name">TEXAS INSTRUMENTS</span>
-        <span class="brand-model">BA II PLUS</span>
+    <div class="brand">
+      <div class="brand-row">
+        <span class="brand-model"><b>BAII</b><i> Plus</i></span>
       </div>
-      <button class="onoff" id="key-onoff" type="button" title="开关机">ON/OFF</button>
+      <div class="brand-row brand-ti">
+        <!-- 德州仪器 Texas state 标志 -->
+        <svg class="ti-mark" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M2 4 L22 4 L19 9 L22 9 L15 21 L13 14 L11 14 L9 21 L2 9 L5 9 Z"
+                fill="#c9c4b8" stroke="none"/>
+        </svg>
+        <span class="brand-name">TEXAS INSTRUMENTS</span>
+      </div>
     </div>
 
     <div class="screen" id="screen">
@@ -33,21 +39,18 @@
         <span class="ind" data-ind="bgn">BGN</span>
         <span class="ind" data-ind="set">SET</span>
         <span class="ind" data-ind="ins">INS</span>
+        <span class="ind" data-ind="del">DEL</span>
+        <span class="ind" data-ind="hypoth">HYP</span>
         <span class="ind" data-ind="err">ERROR</span>
       </div>
       <div class="lcd">
         <span class="lcd-label" id="lcd-label"></span>
         <span class="lcd-value" id="lcd-value">0</span>
       </div>
-      <div class="mode-line" id="mode-line">TVM</div>
+      <div class="lcd-foot">BUSINESS ANALYST</div>
     </div>
 
     <div class="keypad" id="keypad"></div>
-
-    <div class="calc-foot">
-      <span>BUSINESS ANALYST II PLUS</span>
-      <span id="foot-hint">P/Y = 12 · C/Y = 12 · END</span>
-    </div>
   </div>
 
   <aside class="panels">

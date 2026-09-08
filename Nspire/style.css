@@ -1,329 +1,428 @@
-/* ============================================================
-   TI-Nspire CX II CAS 网页版 — 真机 1:1 风格
-   ============================================================ */
+/* ===================================================================
+ * TI-Nspire CX II CAS 真机 1:1 还原
+ *  - 蓝色侧边条 + 黑色面板 + 浅米色 LCD
+ *  - Touchpad 周围 8 颗按键（左右各 4）
+ *  - 主键盘区：修饰 + 数学模板 + 数字 4×4 + 字母 5 列 + 右侧 ⌫
+ * =================================================================== */
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  background: #1c1c1f;
-  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  color: #e7e7e7;
-  min-height: 100vh;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  background: #1a1d24;
   display: flex;
+  justify-content: center;
   align-items: flex-start;
-  justify-content: center;
-  padding: 24px 8px;
+  min-height: 100vh;
+  padding: 20px 10px;
+  color: #fff;
 }
 
-/* ----- 机身外壳 ----- */
 .nspire {
-  width: 100%;
-  max-width: 760px;
+  /* 整机宽度比真机宽一点，便于鼠标点击；尺寸参考真机 4:7 比例 */
+  width: 600px;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6));
 }
+
 .machine {
-  background: linear-gradient(180deg, #2a2a2e 0%, #1a1a1d 100%);
-  border-radius: 28px;
-  padding: 18px 16px 22px;
-  box-shadow:
-    0 4px 0 #0a0a0c,
-    0 14px 30px rgba(0,0,0,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.08);
-  border: 2px solid #0d0d10;
-}
-
-/* ----- 屏幕边框 ----- */
-.screen-frame {
-  background: linear-gradient(180deg, #0a0a0c 0%, #1a1a1d 100%);
-  border-radius: 16px;
-  padding: 10px 12px 6px;
-  border: 2px solid #050507;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.7);
-}
-
-/* 顶部品牌条 */
-.screen-brand {
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
-  gap: 6px;
-  margin: 4px 0 6px;
-  font-family: "Times New Roman", Georgia, serif;
-  color: #d4d4d8;
-  letter-spacing: 1px;
-  user-select: none;
-}
-.brand-ti     { color: #c10000; font-weight: 700; font-size: 18px; font-style: italic; }
-.brand-nspire { color: #e7e7e7; font-size: 13px; }
-.brand-cx     { color: #d4d4d8; font-size: 11px; letter-spacing: 1.5px; }
-.brand-cas    { color: #d4d4d8; font-size: 10px; padding: 1px 5px; border: 1px solid #555; border-radius: 3px; margin-left: 4px; }
-
-/* ----- LCD 屏幕 ----- */
-.screen {
-  background: #0a0a0c;
-  border-radius: 6px;
-  padding: 4px;
-  border: 2px solid #050507;
-  box-shadow: inset 0 0 0 1px #2a2a2e;
-}
-.lcd {
-  background: linear-gradient(180deg, #c8c4ad 0%, #b8b49c 100%);
-  border-radius: 2px;
-  height: 360px;
-  padding: 6px 8px;
-  font-family: "Consolas", "Menlo", "Courier New", monospace;
-  color: #1a1a1f;
-  font-size: 15px;
-  line-height: 1.35;
-  overflow: hidden;
+  background: linear-gradient(180deg, #2a2d34 0%, #1a1c20 100%);
+  border-radius: 32px 32px 28px 28px;
+  padding: 18px 16px 20px;
   position: relative;
-  cursor: text;
-  user-select: text;
+  /* 蓝色侧边条 */
+  border-left: 14px solid #1e7bb3;
+  border-right: 14px solid #1e7bb3;
+  /* 边框内阴影模拟金属质感 */
+  box-shadow:
+    inset 0 0 0 2px #0f1116,
+    inset 0 0 0 4px #2a2d34;
 }
 
-/* LCD 状态栏 */
-.lcd-status {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: #4a4a3a;
-  padding-bottom: 4px;
-  border-bottom: 1px solid rgba(80,80,60,0.3);
-  margin-bottom: 4px;
-}
-.lcd-status .badge {
-  background: #4a4a3a;
-  color: #c8c4ad;
-  padding: 0 4px;
-  border-radius: 2px;
-  margin-right: 4px;
-}
-.lcd-status .mode-exact   { background: #2a4a2a; color: #c8e8c8; }
-.lcd-status .mode-approx  { background: #4a3a1a; color: #f4d870; }
+/* ===================== 屏幕区 ===================== */
 
-/* ----- Calculator 视图 ----- */
-.calc-view {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+.screen-frame {
+  background: #0a0a0c;
+  border-radius: 8px;
+  padding: 12px 12px 4px;
+  position: relative;
+  /* 屏幕下沿贴品牌条 */
+  margin-bottom: 14px;
 }
-.calc-history {
-  flex: 1;
-  overflow-y: auto;
-  padding: 4px 0;
+
+.screen {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #d6d4c5;        /* 浅米色 LCD */
+  border-radius: 4px;
+  border: 2px solid #1c1d20;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 8px rgba(0,0,0,0.25),
+    inset 0 0 0 1px rgba(255,255,255,0.4);
+}
+
+.lcd {
+  position: absolute;
+  inset: 0;
+  padding: 4px 6px;
+  font-family: "Lucida Sans", "Segoe UI", sans-serif;
   font-size: 14px;
+  color: #2a2a2a;
+  overflow: hidden;
+  line-height: 1.4;
 }
-.calc-history .row {
-  margin-bottom: 4px;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-.calc-history .row.input  { color: #4a4a3a; }
-.calc-history .row.output {
-  color: #1a1a1f;
-  padding-left: 8px;
-  border-left: 2px solid #4a4a3a;
-  margin-top: 2px;
-  margin-bottom: 8px;
-  font-weight: 500;
-}
-.calc-history .row.err    { color: #8a2a2a; }
-.calc-entry {
-  min-height: 26px;
-  border-top: 1px dashed rgba(80,80,60,0.4);
-  padding: 4px 0 2px;
-  white-space: pre-wrap;
-  word-break: break-all;
-  font-size: 17px;
-  color: #1a1a1f;
-}
-.calc-entry .cursor {
-  display: inline-block;
-  width: 1ch;
-  background: #1a1a1f;
-  color: transparent;
-  animation: blink 1s step-end infinite;
-}
-@keyframes blink { 50% { background: transparent; } }
 
-/* ----- Home 主屏幕 ----- */
-.home-view {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  padding: 6px;
-  height: 100%;
-}
-.home-title {
-  grid-column: 1 / 3;
+.lcd .calc-entry {
+  display: block;
+  text-align: right;
   font-size: 18px;
   font-weight: 600;
-  color: #1a1a1f;
-  border-bottom: 2px solid #1a1a1f;
-  padding-bottom: 4px;
-  margin-bottom: 4px;
-}
-.app-card {
-  background: rgba(255,255,255,0.45);
-  border: 2px solid #4a4a3a;
-  border-radius: 8px;
-  padding: 10px 8px;
-  text-align: center;
-  cursor: pointer;
-  transition: transform 0.08s, background 0.08s;
-  user-select: none;
-}
-.app-card:hover {
-  background: rgba(255,255,255,0.85);
-  transform: translateY(-1px);
-}
-.app-card.coming-soon { opacity: 0.55; border-style: dashed; }
-.app-card.coming-soon::after {
-  content: "Coming soon";
-  display: block;
-  font-size: 9px;
-  color: #6a6a5a;
-  margin-top: 4px;
-}
-.app-icon { font-size: 26px; margin-bottom: 2px; }
-.app-name { font-size: 12px; color: #1a1a1f; font-weight: 500; }
-
-/* ----- 应用通用 ----- */
-.app-view {
-  padding: 8px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.app-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 4px;
-  border-bottom: 2px solid #1a1a1f;
   margin-bottom: 6px;
-}
-.app-header .title { font-size: 16px; font-weight: 700; color: #1a1a1f; }
-.app-header .back {
-  font-size: 11px; color: #1a1a1f; cursor: pointer;
-  border: 1px solid #1a1a1f; padding: 1px 6px; border-radius: 3px;
-}
-.stub {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #4a4a3a;
-  font-size: 13px;
-  font-style: italic;
+  min-height: 24px;
+  word-break: break-all;
 }
 
-/* ----- Touchpad ----- */
-.touchpad-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 0 6px;
-  gap: 12px;
+.lcd .calc-history {
+  font-size: 13px;
+  color: #1c1c1c;
 }
-.touchpad {
-  width: 96px;
-  height: 56px;
-  background: #0d0d10;
-  border: 2px solid #050507;
-  border-radius: 28px;
-  display: grid;
-  grid-template-columns: 28px 40px 28px;
-  grid-template-rows: 18px 18px;
-  position: relative;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
-  cursor: pointer;
+
+.lcd .calc-history .row {
+  padding: 2px 0;
+  border-bottom: 1px dotted rgba(0,0,0,0.15);
+}
+
+.lcd .calc-history .row.in {
+  color: #000;
+}
+
+.lcd .calc-history .row.out {
+  color: #2a4d8f;
+  text-align: right;
+  font-weight: 600;
+}
+
+.lcd .cursor {
+  display: inline-block;
+  width: 7px;
+  background: #000;
+  animation: blink 1s steps(1) infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+  0%, 50%   { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* 屏幕下方品牌条 */
+.screen-brand {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 6px 8px 0;
   user-select: none;
 }
-.tp-up    { grid-area: 1 / 2; color: #6a6a6a; font-size: 11px; text-align: center; line-height: 18px; cursor: pointer; }
-.tp-down  { grid-area: 2 / 2; color: #6a6a6a; font-size: 11px; text-align: center; line-height: 18px; cursor: pointer; }
-.tp-left  { grid-area: 1 / 1 / span 2 / 1; align-self: center; color: #6a6a6a; font-size: 11px; padding-left: 4px; cursor: pointer; }
-.tp-right { grid-area: 1 / 3 / span 2 / 3; align-self: center; color: #6a6a6a; font-size: 11px; padding-right: 4px; text-align: right; cursor: pointer; }
-.tp-center{ grid-area: 1 / 2 / span 2 / 2; border-radius: 50%; margin: 4px 8px; cursor: pointer; }
-.touchpad:active .tp-center { background: rgba(255,255,255,0.05); }
-.tp-label { color: #6a6a6a; font-size: 10px; letter-spacing: 1px; }
 
-/* ----- 键盘 ----- */
-.keyboard {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 12px 4px 4px;
+.brand-line1 {
+  font-family: "Times New Roman", serif;
+  font-size: 18px;
+  color: #fff;
+  letter-spacing: 0.5px;
 }
-.key-row {
+
+.brand-line1 .brand-ti     { font-weight: 700; color: #fff; }
+.brand-line1 .brand-nspire { font-style: italic; color: #fff; font-size: 16px; }
+.brand-line1 .brand-cx     { font-size: 14px; color: #d8d8d8; }
+
+.brand-line2 {
+  font-size: 8px;
+  color: #888;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  flex: 1;
+  text-align: center;
+  padding: 0 8px;
+  font-family: "Arial Narrow", Arial, sans-serif;
+}
+
+.brand-line3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  border: 1px solid #fff;
+  padding: 1px 6px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+}
+
+/* ===================== Touchpad 区 ===================== */
+
+.touchpad-section {
   display: grid;
-  gap: 4px;
+  grid-template-columns: 70px 1fr 70px;
+  gap: 8px;
+  margin-bottom: 14px;
+  align-items: center;
 }
-.key-row.modifiers { grid-template-columns: repeat(9, 1fr); }
-.key-row.templates { grid-template-columns: repeat(10, 1fr); }
-.key-row.qwerty    { grid-template-columns: repeat(10, 1fr); }
-.key-row.bottom    { grid-template-columns: repeat(8, 1fr); }
-.key-row.numpad-wrap {
-  display: grid;
-  grid-template-columns: 1fr 56px;
-  gap: 6px;
-  align-items: stretch;
-}
-.numpad {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 4px;
-}
+
 .side-keys {
   display: grid;
-  grid-template-rows: repeat(2, 32px) 1fr;
-  gap: 4px;
-}
-.side-keys .big {
-  grid-row: span 1;
-  min-height: 68px;
+  grid-template-rows: repeat(4, 1fr);
+  gap: 6px;
+  height: 130px;
 }
 
-/* ----- 键通用 ----- */
-.key {
-  background: linear-gradient(180deg, #3a3a3e 0%, #2a2a2e 100%);
-  color: #e7e7e7;
-  border: 1px solid #0a0a0c;
-  border-top-color: #4a4a4e;
-  border-radius: 5px;
-  padding: 6px 4px;
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 500;
+.touchpad-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.touchpad {
+  width: 150px;
+  height: 110px;
+  background: linear-gradient(180deg, #2a2c30 0%, #1a1c1f 100%);
+  border-radius: 14px;
+  position: relative;
+  border: 2px solid #0a0b0d;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.15),
+    inset 0 -1px 0 rgba(0,0,0,0.6);
   cursor: pointer;
   user-select: none;
-  box-shadow:
-    0 1px 0 #4a4a4e,
-    0 2px 3px rgba(0,0,0,0.4);
-  transition: transform 0.04s, box-shadow 0.04s;
-  min-height: 30px;
-  white-space: nowrap;
 }
-.key:hover  { background: linear-gradient(180deg, #42424a 0%, #2a2a2e 100%); }
-.key:active {
-  transform: translateY(1px);
-  box-shadow: 0 1px 0 #4a4a4e inset, 0 1px 1px rgba(0,0,0,0.4);
-  background: linear-gradient(180deg, #2a2a2e 0%, #3a3a3e 100%);
-}
-.key.sym   { background: linear-gradient(180deg, #4a3a1a 0%, #2e2810 100%); border-top-color: #6a4a1a; color: #f4d870; font-size: 13px; }
-.key.mod   { background: linear-gradient(180deg, #4a4a4e 0%, #2a2a2e 100%); color: #ffffff; font-size: 11px; }
-.key.mod-shift { background: linear-gradient(180deg, #d4a020 0%, #a07a10 100%); color: #1a1a1f; font-weight: 700; border-top-color: #f0c040; }
-.key.mod-ctrl  { background: linear-gradient(180deg, #2a4a5a 0%, #1a3a4a 100%); border-top-color: #4a6a7a; }
-.key.op    { color: #f4a020; font-weight: 700; }
-.key.enter {
-  background: linear-gradient(180deg, #1a5a2a 0%, #0a3a1a 100%);
-  border-top-color: #2a7a3a;
-  color: #c8e8c8;
-}
-.key.space { background: linear-gradient(180deg, #3a3a3e 0%, #2a2a2e 100%); }
 
-/* shift 按下时高亮所有字母 */
-body.shift-on .key.letter { color: #f4d870; }
-body.shift-on .key.mod-shift { background: linear-gradient(180deg, #f0c040 0%, #d4a020 100%); box-shadow: 0 0 6px #f4d870; }
-body.ctrl-on  .key.mod-ctrl  { background: linear-gradient(180deg, #4a8aaa 0%, #2a6a8a 100%); box-shadow: 0 0 6px #4a8aaa; }
+.touchpad > div:not(.tp-center) {
+  position: absolute;
+  color: #888;
+  font-size: 13px;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.tp-up    { top: 6px;    left: 50%; transform: translateX(-50%); }
+.tp-down  { bottom: 6px; left: 50%; transform: translateX(-50%); }
+.tp-left  { left: 10px;  top: 50%;  transform: translateY(-50%); }
+.tp-right { right: 10px; top: 50%;  transform: translateY(-50%); }
+
+.tp-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 22px; height: 22px;
+  transform: translate(-50%, -50%);
+  background: #2a2c30;
+  border: 2px solid #0a0b0d;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.tp-label {
+  margin-top: 6px;
+  font-size: 9px;
+  color: #6a6c70;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ===================== 主键盘区 ===================== */
+
+.keyboard {
+  background: #0a0b0d;
+  border-radius: 8px;
+  padding: 10px 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.key-row {
+  display: grid;
+  gap: 6px;
+}
+
+/* 顶栏小字标签 */
+.label-row {
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 0 4px;
+  font-size: 9px;
+  color: #b0b3b8;
+  letter-spacing: 1.5px;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+}
+
+.lbl-right { text-align: right; }
+
+/* 修饰 + 模板 + 数字混合行 */
+.ctrl-row, .templates, .pi-row, .trig-row {
+  grid-template-columns: repeat(6, 1fr) repeat(3, 1fr) 1fr 1fr;
+  /* 6 个修饰/符号 + 3 个数字 + 1 个符号 + 1 个导航键 */
+}
+
+.ops-row {
+  grid-template-columns: repeat(10, 1fr);
+}
+
+/* 字母键盘：5 列 + 右侧 ⌫ 跨 5 行 */
+.alpha-wrap {
+  display: grid;
+  grid-template-columns: 1fr 56px;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.alpha-block {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.alpha-block .key.space {
+  grid-column: span 3;
+}
+
+/* ===================== 按键样式 ===================== */
+
+.key {
+  background: linear-gradient(180deg, #3a3c42 0%, #2a2c30 100%);
+  color: #e8e8ea;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 4px;
+  font-family: "Lucida Sans", "Segoe UI", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  min-height: 32px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.15),
+    inset 0 -1px 0 rgba(0,0,0,0.5),
+    0 1px 0 #0a0b0d;
+  transition: transform 0.05s, box-shadow 0.05s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.key:hover {
+  background: linear-gradient(180deg, #4a4c52 0%, #3a3c40 100%);
+}
+
+.key:active, .key.pressed {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 2px rgba(0,0,0,0.6);
+}
+
+/* 数字键稍大一点 */
+.key.num {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* 修饰键（esc / home / tab / ctrl / shift / on 等） */
+.key.mod {
+  font-size: 11px;
+  color: #d8d8d8;
+  font-weight: 500;
+}
+
+.key.mod-shift {
+  background: linear-gradient(180deg, #4a3a2a 0%, #3a2a1a 100%);
+  color: #f0e0c0;
+}
+
+.key.mod-ctrl {
+  background: linear-gradient(180deg, #1e6ba8 0%, #155a8e 100%);
+  color: #fff;
+}
+
+.key.mod.mod-ctrl:hover {
+  background: linear-gradient(180deg, #2e7bb8 0%, #256a9e 100%);
+}
+
+/* 数学符号键 */
+.key.sym {
+  font-size: 12px;
+  color: #b8d8f0;
+  font-weight: 500;
+}
+
+/* 字母键 */
+.key.letter {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* 数字 / 字母以外的命令键 */
+.key.op {
+  color: #f0e0a0;
+  font-weight: 700;
+}
+
+/* enter 键（绿色光晕） */
+.key.enter {
+  background: linear-gradient(180deg, #2a7a3a 0%, #1a5a2a 100%);
+  color: #fff;
+  font-weight: 700;
+}
+
+.key.enter:hover {
+  background: linear-gradient(180deg, #3a8a4a 0%, #2a6a3a 100%);
+}
+
+.key.enter.big {
+  grid-row: span 2;
+  font-size: 14px;
+}
+
+/* 退格键（橙红色） */
+.key.backspace {
+  background: linear-gradient(180deg, #a83a2a 0%, #882a1a 100%);
+  color: #fff;
+  font-size: 16px;
+}
+
+.key.backspace.big {
+  grid-row: span 5;
+  font-size: 18px;
+}
+
+/* 导航键（小一号） */
+.key.nav-up, .key.nav-down, .key.nav-left, .key.nav-right {
+  font-size: 14px;
+  color: #d0d0d0;
+}
+
+/* 空格键 */
+.key.space {
+  background: linear-gradient(180deg, #2a2c30 0%, #1a1c20 100%);
+  font-size: 11px;
+  color: #888;
+}
+
+/* 键上方的光圈标签（如 EE、sto→、clear） */
+.key .abbr {
+  display: inline-block;
+  margin-left: 2px;
+  font-size: 9px;
+  color: #f0e0a0;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(240,224,160,0.4);
+  border-radius: 50%;
+  padding: 0 3px;
+  vertical-align: middle;
+  font-weight: 500;
+}
+
+/* 2nd 激活态（保留给 app.js 用，未来可扩展） */
+.key.second-active {
+  outline: 2px solid #f0a040;
+  outline-offset: -2px;
+}
+</content>
+</invoke>

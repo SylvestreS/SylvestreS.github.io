@@ -320,14 +320,17 @@
     const mod = el.getAttribute("data-key");
 
     // 修饰键
-    if (mod === "home")  return openApp("home");
-    if (mod === "esc")   return openApp("home");
+    if (mod === "home" || mod === "esc") return openApp("home");
     if (mod === "shift") return toggleShift();
     if (mod === "ctrl")  return toggleCtrl();
     if (mod === "caps")  return toggleCaps();
-    if (mod === "del")   return calcBackspace();
+    if (mod === "del" || mod === "del-top") return calcBackspace();
     if (mod === "tab")   return calcAppend("\t");
-    if (mod === "menu" || mod === "doc" || mod === "var") return flash(`${mod.toUpperCase()} 菜单（占位）`);
+    if (mod === "E")     return calcAppend("10^");  // 真机 E 键 = EE（科学计数）
+    if (mod === "var")   return flash("VAR 菜单（占位）");
+    if (mod === "menu" || mod === "doc" || mod === "doc2") return flash(`${mod.toUpperCase()} 菜单（占位）`);
+    if (mod === "on")    return flash("ON 关机键（占位）");
+    if (mod === "page")  return flash("PAGE 多页（占位）");
 
     // 仅在 calculator 应用响应
     if (S.currentApp !== "calculator") {
@@ -351,9 +354,12 @@
       if (action === "power")    return calcAppend("^");
       if (action === "power2")   return calcAppend("^2");
       if (action === "power-1")  return calcAppend("^(-1)");
+      if (action === "power-3")  return calcAppend("^(-3)");
       if (action === "frac")     return calcAppend("/");
+      if (action === "fraction") return calcAppend("/");
       if (action === "frac2")    return calcAppend("/");
       if (action === "assign")   return calcAppend(":=");
+      if (action === "comma")    return calcAppend(",");
       if (action === "le")       return calcAppend("<=");
       if (action === "ge")       return calcAppend(">=");
       if (action === "log")      return calcAppend("log(");
@@ -363,9 +369,22 @@
       if (action === "tan")      return calcAppend("tan(");
       if (action === "factor")   return calcAppend("factor(");
       if (action === "simplify") return calcAppend("simplify(");
+      if (action === "catlg")    return flash("CATALOG（占位）");
+      if (action === "angle")    return calcAppend("∠");
+      if (action === "ee")       return calcAppend("10^");
+      if (action === "flag" || action === "flag2" || action === "flag3") return flash("FLAG（占位）");
+      if (action === "toggle-exact") return calcToggleMode();
+      if (action === "del")      return calcBackspace();
       if (char !== null) {
         let ch = char;
-        if (S.shift && /^[a-z]$/.test(ch)) ch = ch.toUpperCase();
+        // 真机行为：键上印大写，但默认输入小写（像手机键盘）
+        // shift 按下时切大写；caps lock 反转默认大小写
+        if (/^[a-zA-Z]$/.test(ch)) {
+          const lower = ch.toLowerCase();
+          const upper = ch.toUpperCase();
+          if (S.shift) ch = S.caps ? lower : upper;
+          else        ch = S.caps ? upper : lower;
+        }
         calcAppend(ch);
       }
     }

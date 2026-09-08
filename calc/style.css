@@ -1,0 +1,340 @@
+/* ============================================================
+   TI BA II PLUS 模拟器 · 外观
+   真机配色：深灰机身 / 米白按键 / 黄色 2nd 标签 / 黄绿 LCD
+   ============================================================ */
+
+:root {
+  --body: #2b2b2e;
+  --panel: #3a3a3f;
+  --panel-dark: #232326;
+  --lcd: #a9b98d;
+  --lcd-ink: #1d2413;
+  --key: #f1efe9;
+  --key-tvm: #dbd8d0;
+  --key-fn: #e4e1da;
+  --key-act: #c9c5bb;
+  --snd: #f2c230;
+  --ink: #23231f;
+  --ink-dim: #6a6a63;
+  --mono: "SF Mono", "Cascadia Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #fff;
+  color: #111;
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ 页面框架（沿用笔记站的黑白风） ============ */
+
+.site-head {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 24px 20px;
+}
+.site-head .back {
+  font-size: 12px;
+  color: #888;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+}
+.site-head .back:hover { color: #111; }
+.site-head h1 {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 500;
+  margin: 12px 0 4px;
+  letter-spacing: -0.5px;
+}
+.site-head .sub { margin: 0; color: #666; font-size: 13px; }
+
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px 48px;
+  display: grid;
+  grid-template-columns: 372px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.site-foot {
+  border-top: 1px solid #eee;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+  color: #999;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ============ 机身 ============ */
+
+.calc {
+  background: var(--body);
+  border-radius: 14px;
+  padding: 16px 14px 12px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.08) inset,
+              0 12px 32px rgba(0,0,0,.18);
+  user-select: none;
+}
+
+.calc-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 4px 10px;
+}
+.brand { display: flex; flex-direction: column; line-height: 1.15; }
+.brand-name {
+  font-size: 8px;
+  letter-spacing: 1.4px;
+  color: #9a9a94;
+  text-transform: uppercase;
+}
+.brand-model {
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  color: #e8e6e0;
+  font-weight: 500;
+}
+.onoff {
+  background: var(--key-fn);
+  border: none;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  color: var(--ink);
+  padding: 3px 8px;
+  cursor: pointer;
+}
+.onoff:active { background: var(--key-act); }
+
+/* ============ 显示屏 ============ */
+
+.screen {
+  background: var(--panel-dark);
+  border-radius: 8px;
+  padding: 10px 12px 8px;
+  margin-bottom: 14px;
+}
+
+.indicators {
+  display: flex;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.8px;
+  color: var(--lcd);
+  opacity: 0.22;
+  margin-bottom: 6px;
+  min-height: 11px;
+}
+.ind.on { opacity: 1; }
+.ind[data-ind="err"].on { color: #ff8b7a; }
+
+.lcd {
+  background: var(--lcd);
+  border-radius: 3px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.4) inset;
+}
+.lcd.off { background: #8d9a76; }
+.lcd-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--lcd-ink);
+  opacity: 0.75;
+  white-space: nowrap;
+}
+.lcd-value {
+  font-family: var(--mono);
+  font-size: 26px;
+  line-height: 1;
+  color: var(--lcd-ink);
+  letter-spacing: 1px;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.mode-line {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.6px;
+  color: #7d7d78;
+  margin-top: 6px;
+  min-height: 12px;
+}
+
+/* ============ 键盘 ============ */
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px 6px;
+}
+
+.slot { display: flex; flex-direction: column; align-items: stretch; }
+
+/* 键上方的黄色 2nd 标签（真机是印在机身上的） */
+.snd {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.2px;
+  color: var(--snd);
+  text-align: center;
+  height: 12px;
+  line-height: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.snd.armed { color: #fff; }
+
+.key {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--ink);
+  background: var(--key);
+  border: none;
+  border-radius: 4px;
+  padding: 9px 2px 8px;
+  cursor: pointer;
+  box-shadow: 0 1.5px 0 #b9b6ad;
+  transition: background .06s, transform .04s, box-shadow .04s;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.key:hover { background: #fbfaf7; }
+.key:active,
+.key.pressed {
+  background: var(--key-act);
+  transform: translateY(1.5px);
+  box-shadow: 0 0 0 #b9b6ad;
+}
+
+.key.tvm { background: var(--key-tvm); box-shadow: 0 1.5px 0 #a8a59c; }
+.key.tvm:hover { background: #e6e3dd; }
+.key.fn { background: var(--key-fn); }
+.key.fn:hover { background: #eeece7; }
+.key.enter { background: var(--key-tvm); box-shadow: 0 1.5px 0 #a8a59c; }
+.key.digit { font-size: 14px; }
+.key.op { font-size: 14px; }
+.key.arrow { font-size: 13px; }
+.key.wide { grid-column: span 2; }
+.key.tall { grid-row: span 2; padding: 0; font-size: 14px; }
+.key.blank {
+  background: transparent;
+  box-shadow: none;
+  cursor: default;
+  pointer-events: none;
+}
+.key.blank:active { transform: none; }
+
+.key.snd-active { background: var(--snd) !important; }
+
+.calc-foot {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 7.5px;
+  letter-spacing: 0.5px;
+  color: #7a7a75;
+  padding: 10px 4px 0;
+}
+
+/* ============ 侧栏 ============ */
+
+.panels { display: flex; flex-direction: column; gap: 20px; }
+
+.panel {
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+.panel h2 {
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 0 12px;
+  letter-spacing: 0.2px;
+}
+
+.regs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px 14px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+}
+.reg { display: flex; justify-content: space-between; gap: 8px; }
+.reg span:first-child { color: #999; }
+.reg span:last-child { font-variant-numeric: tabular-nums; }
+.reg.set span:last-child { color: #111; font-weight: 500; }
+
+.panel-note {
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: #777;
+  white-space: pre-wrap;
+  line-height: 1.7;
+  border-top: 1px dashed #e5e5e5;
+  padding-top: 10px;
+}
+
+.howto { margin: 0; padding-left: 18px; font-size: 13px; color: #333; }
+.howto li { margin-bottom: 6px; }
+.howto code {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: #f5f5f5;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.keys-help {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #555;
+  display: grid;
+  gap: 5px;
+}
+kbd {
+  font-family: var(--mono);
+  font-size: 11px;
+  border: 1px solid #ddd;
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  padding: 0 4px;
+  background: #fafafa;
+}
+
+/* ============ 响应式 ============ */
+
+@media (max-width: 820px) {
+  .wrap { grid-template-columns: 1fr; }
+  .calc { max-width: 372px; margin: 0 auto; }
+}
+@media (max-width: 400px) {
+  .wrap { padding: 0 14px 32px; }
+  .key { font-size: 11.5px; padding: 8px 1px; }
+  .snd { font-size: 7px; }
+  .lcd-value { font-size: 22px; }
+}

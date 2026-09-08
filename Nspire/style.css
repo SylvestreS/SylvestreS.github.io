@@ -505,3 +505,99 @@ body.ctrl-on .key.ctrl {
 /* 点击态联动：双标签键在 shift 激活时，副标签变亮 */
 body.shift-on .key.dual .lbl2 { color: #f0a040; font-weight: 700; }
 body.shift-on .key.dual .main { color: #888; }
+
+/* ===================== Graphs 绘图应用 ===================== */
+
+.lcd .graph-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 2px;
+}
+
+.graph-toolbar {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 11px;
+}
+.graph-toolbar .gtitle {
+  font-weight: 700;
+  color: #1a3a6b;
+  font-size: 12px;
+  margin-right: 2px;
+}
+.graph-toolbar .gbtn {
+  background: #3a6ea5;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-size: 10px;
+  cursor: pointer;
+}
+.graph-toolbar .gbtn:hover { background: #4a7eb5; }
+.graph-toolbar .gbtn.active { background: #c0504d; }
+
+.graph-fns .chip {
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  border: 1px solid #999;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.55);
+}
+.graph-fns .chip.active { outline: 2px solid #000; }
+
+.graph-canvas {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  background: #fff;
+  border: 1px solid #888;
+  border-radius: 2px;
+  display: block;
+}
+
+.graph-eq {
+  font-size: 12px;
+  color: #333;
+  padding: 1px 2px;
+  border-radius: 2px;
+}
+.graph-eq.active { background: rgba(43, 108, 255, 0.12); }
+.graph-eq .fx { font-weight: 700; }
+
+.graph-entry {
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  min-height: 16px;
+  word-break: break-all;
+}
+.graph-trace {
+  font-size: 10px;
+  color: #333;
+}
+
+.graph-window {
+  display: grid;
+  grid-template-columns: auto 1fr auto 1fr;
+  gap: 2px 6px;
+  font-size: 11px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  padding: 3px 4px;
+}
+.graph-window label { color: #1a3a6b; font-weight: 600; }
+.graph-window input {
+  width: 64px;
+  font-size: 11px;
+  border: 1px solid #999;
+  border-radius: 2px;
+  padding: 1px 3px;
+}
+.graph-window .gbtn { grid-column: span 2; justify-self: start; }

@@ -88,7 +88,7 @@
           <button class="key num" data-char="7">7</button>
           <button class="key num" data-char="8">8</button>
           <button class="key num" data-char="9">9</button>
-          <button class="key dual small-font" data-action="catlg">
+          <button class="key dual small-font" data-action="ee">
             <span class="main">EE</span>
           </button>
         </div>
@@ -130,13 +130,28 @@
           <button class="key enter big" data-action="enter">enter</button>
         </div>
 
-        <!-- R5 补充行：常用数学/逻辑符号 + 单独的 ) 键（保持测试兼容） -->
+        <!-- 功能键栏：三角函数 / 对数 / 根号 / 常数 / 逻辑 / 工具 -->
         <div class="kp-row kp-extra">
-          <button class="key sym" data-char=")">)</button>
-          <button class="key sym" data-action="approx">&asymp;</button>
-          <button class="key sym" data-action="ans">Ans</button>
-          <button class="key sym" data-action="comma">,</button>
-          <button class="key sym" data-action="le">&le;</button>
+          <button class="key fn dual" data-action="sin" data-action-shift="arcsin"><span class="main">sin</span><span class="lbl2">sin⁻¹</span></button>
+          <button class="key fn dual" data-action="cos" data-action-shift="arccos"><span class="main">cos</span><span class="lbl2">cos⁻¹</span></button>
+          <button class="key fn dual" data-action="tan" data-action-shift="arctan"><span class="main">tan</span><span class="lbl2">tan⁻¹</span></button>
+
+          <button class="key fn" data-action="ln">ln</button>
+          <button class="key fn" data-action="log">log</button>
+
+          <button class="key fn" data-action="sqrt">&#8730;</button>
+          <button class="key fn" data-action="pi">&#960;</button>
+          <button class="key fn" data-action="ekey">e</button>
+
+          <button class="key fn" data-action="assign">:=</button>
+          <button class="key fn" data-action="le">&le;</button>
+          <button class="key fn" data-action="ge">&ge;</button>
+
+          <button class="key fn sym" data-char=")">)</button>
+          <button class="key fn sym" data-action="comma">,</button>
+          <button class="key fn sym" data-action="ans">Ans</button>
+          <button class="key fn sym" data-action="approx">&asymp;</button>
+          <button class="key fn clear" data-action="clear">clr</button>
         </div>
 
         <!-- 字母键盘 -->

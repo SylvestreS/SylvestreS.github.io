@@ -1,0 +1,500 @@
+/* ============================================================
+   TI BA II PLUS 模拟器 · 外观（按真机配色重做）
+   真机：深炭灰机身 / 黑色键身+白字 / 浅灰数字键+黑字 /
+        奶黄 2nd 键 / 键上方奶黄 2nd 标签印在机身上
+   ============================================================ */
+
+:root {
+  /* 机身 */
+  --body:        #26262a;
+  --body-edge:   #1d1d20;
+  --body-light:  #34343a;
+  /* 屏幕 */
+  --screen-bezel: #0f0f12;
+  --lcd-bg:      #a7b88a;
+  --lcd-bg-off:  #889574;
+  --lcd-ink:     #1d2413;
+  --lcd-ink-dim: #5b6248;
+  /* 键 */
+  --key-dark:        #2f2f33;
+  --key-dark-top:    #3a3a3f;   /* 高光（上沿） */
+  --key-dark-bot:    #1f1f22;   /* 阴影（下沿） */
+  --key-dark-active: #1a1a1d;
+  --key-tvm:         #4a4a50;
+  --key-tvm-top:     #56565d;
+  --key-tvm-bot:     #383840;
+  --key-digit:       #c4c3bd;
+  --key-digit-top:   #d2d1cb;
+  --key-digit-bot:   #a8a7a1;
+  --key-digit-active:#8c8b86;
+  /* 2nd 键 */
+  --snd:         #e8b933;
+  --snd-top:     #f0c64a;
+  --snd-bot:     #b8901d;
+  --snd-active:  #8a6a14;
+  --snd-label:   #e8b933;   /* 印在键上方的 2nd 标签色 */
+  --snd-label-2: #c79a25;   /* 武装态的 2nd 标签色 */
+  /* 文字 */
+  --ink-white:    #f0eee8;
+  --ink-white-2:  #d8d4ca;
+  --ink-dark:     #1a1a1c;
+  --ink-dark-2:   #3a3a3d;
+  --ink-dim:      #888780;
+  /* 字体 */
+  --mono: "SF Mono", "Cascadia Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #f5f4ef;
+  color: #111;
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ 页面框架 ============ */
+
+.site-head {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 24px 20px;
+}
+.site-head .back {
+  font-size: 12px;
+  color: #888;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+}
+.site-head .back:hover { color: #111; }
+.site-head h1 {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 500;
+  margin: 12px 0 4px;
+  letter-spacing: -0.5px;
+}
+.site-head .sub { margin: 0; color: #666; font-size: 13px; }
+
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px 48px;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.site-foot {
+  border-top: 1px solid #eee;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+  color: #999;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ============ 机身 ============ */
+
+.calc {
+  background: linear-gradient(180deg, var(--body-light) 0%, var(--body) 100%);
+  border-radius: 16px;
+  padding: 12px 12px 14px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.08) inset,
+    0 -1px 0 rgba(0,0,0,.3) inset,
+    0 16px 40px rgba(0,0,0,.22),
+    0 2px 6px rgba(0,0,0,.18);
+  user-select: none;
+  border: 1px solid var(--body-edge);
+}
+
+/* ============ 品牌区 ============ */
+
+.brand {
+  text-align: center;
+  padding: 4px 0 8px;
+  color: var(--ink-white);
+}
+.brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  line-height: 1.05;
+}
+.brand-model {
+  font-family: var(--sans);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--ink-white);
+  text-shadow: 0 1px 0 rgba(0,0,0,.5);
+}
+.brand-model b { font-weight: 700; }
+.brand-model i {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink-white-2);
+}
+.brand-ti { margin-top: 4px; gap: 4px; }
+.brand-ti .ti-mark {
+  width: 14px; height: 14px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,.4));
+}
+.brand-name {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  color: var(--ink-white-2);
+}
+
+/* ============ 屏幕 ============ */
+
+.screen {
+  background: var(--screen-bezel);
+  border-radius: 8px;
+  padding: 9px 11px 7px;
+  margin: 6px 0 12px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.04) inset,
+              0 2px 4px rgba(0,0,0,.3) inset;
+}
+
+.indicators {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--lcd-ink);
+  opacity: 0.18;
+  margin-bottom: 5px;
+  min-height: 11px;
+}
+.ind.on { opacity: 1; }
+.ind[data-ind="err"].on { color: #a23030; opacity: 1; }
+
+.lcd {
+  background: var(--lcd-bg);
+  border-radius: 3px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.5) inset,
+              0 -1px 0 rgba(255,255,255,.06) inset;
+  min-height: 34px;
+}
+.lcd.off { background: var(--lcd-bg-off); }
+.lcd-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--lcd-ink);
+  opacity: 0.7;
+  white-space: nowrap;
+}
+.lcd-value {
+  font-family: var(--mono);
+  font-size: 22px;
+  line-height: 1;
+  color: var(--lcd-ink);
+  letter-spacing: 0.8px;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+  flex: 1;
+  text-align: right;
+}
+
+.lcd-foot {
+  text-align: center;
+  margin-top: 6px;
+  font-family: var(--sans);
+  font-size: 7.5px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  color: var(--ink-white-2);
+  opacity: 0.65;
+}
+
+/* ============ 键盘 ============ */
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px 4px;
+}
+
+.slot {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+}
+
+/* 键上方的黄色 2nd 标签（真机是印在机身上的，悬浮在键之上） */
+.snd {
+  font-family: var(--mono);
+  font-size: 7.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: var(--snd-label);
+  text-align: center;
+  height: 11px;
+  line-height: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-shadow: 0 1px 0 rgba(0,0,0,.5);
+  margin-bottom: 1px;
+}
+.snd.armed { color: var(--snd-label-2); }
+
+/* —— 键通用 —— */
+.key {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 2px 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
+  line-height: 1.15;
+  transition: background .05s, transform .04s, box-shadow .04s;
+}
+
+/* —— 深色键（最常见） —— */
+.key.dark {
+  color: var(--ink-white);
+  background: linear-gradient(180deg, var(--key-dark-top) 0%, var(--key-dark) 50%, var(--key-dark-bot) 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.06) inset,
+    0 -1px 0 rgba(0,0,0,.3) inset,
+    0 1.5px 0 #15151a;
+  text-shadow: 0 1px 0 rgba(0,0,0,.5);
+}
+.key.dark:hover { filter: brightness(1.12); }
+.key.dark:active,
+.key.dark.pressed {
+  background: linear-gradient(180deg, var(--key-dark-active) 0%, var(--key-dark) 100%);
+  transform: translateY(1px);
+  box-shadow: 0 0 0 rgba(0,0,0,0);
+}
+
+/* —— TVM 键（稍亮一点的深色） —— */
+.key.tvm {
+  color: var(--ink-white);
+  background: linear-gradient(180deg, var(--key-tvm-top) 0%, var(--key-tvm) 50%, var(--key-tvm-bot) 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.08) inset,
+    0 -1px 0 rgba(0,0,0,.3) inset,
+    0 1.5px 0 #1a1a1f;
+  text-shadow: 0 1px 0 rgba(0,0,0,.5);
+  font-size: 12px;
+  font-weight: 600;
+}
+.key.tvm:hover { filter: brightness(1.1); }
+.key.tvm:active,
+.key.tvm.pressed {
+  background: var(--key-dark-active);
+  transform: translateY(1px);
+}
+
+/* —— 数字键（浅灰大块） —— */
+.key.digit {
+  color: var(--ink-dark);
+  background: linear-gradient(180deg, var(--key-digit-top) 0%, var(--key-digit) 50%, var(--key-digit-bot) 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.5) inset,
+    0 -1px 0 rgba(0,0,0,.15) inset,
+    0 1.5px 0 #8a8a85;
+  font-size: 15px;
+  font-weight: 500;
+  text-shadow: 0 1px 0 rgba(255,255,255,.3);
+}
+.key.digit:hover { filter: brightness(1.04); }
+.key.digit:active,
+.key.digit.pressed {
+  background: linear-gradient(180deg, var(--key-digit) 0%, var(--key-digit-active) 100%);
+  transform: translateY(1px);
+  box-shadow: 0 0 0 rgba(0,0,0,0);
+}
+
+/* —— 2nd 键（奶黄色） —— */
+.key.snd-key {
+  color: var(--ink-dark);
+  background: linear-gradient(180deg, var(--snd-top) 0%, var(--snd) 50%, var(--snd-bot) 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.5) inset,
+    0 -1px 0 rgba(0,0,0,.2) inset,
+    0 1.5px 0 #6e5610;
+  font-size: 12px;
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgba(255,255,255,.3);
+  font-style: italic;
+}
+.key.snd-key:hover { filter: brightness(1.05); }
+.key.snd-key:active,
+.key.snd-key.pressed,
+.key.snd-key.armed {
+  background: linear-gradient(180deg, var(--snd-active) 0%, var(--snd-bot) 100%);
+  transform: translateY(1px);
+}
+
+/* —— 双行标签键（顶行 QUIT/CPT 等，主+2nd 同印在键上） —— */
+.key.two-line {
+  font-size: 9.5px;
+  line-height: 1.15;
+  padding: 4px 2px 5px;
+}
+.key.two-line .k-main {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  margin-bottom: 1px;
+}
+.key.two-line .k-snd {
+  display: block;
+  font-size: 8.5px;
+  font-weight: 500;
+  color: var(--snd-label);
+  letter-spacing: 0.2px;
+  font-style: italic;
+}
+.key.snd-active .k-snd { color: var(--snd-active); }
+
+/* —— 箭头键 —— */
+.key.arrow {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* —— 运算符键 —— */
+.key.op {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* —— = 跨两行 —— */
+.key.tall {
+  grid-row: span 2;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* —— 占位 —— */
+.key.blank {
+  background: transparent;
+  box-shadow: none;
+  cursor: default;
+  pointer-events: none;
+  visibility: hidden;
+}
+.key.blank:active { transform: none; }
+
+/* ============ 侧栏 ============ */
+
+.panels { display: flex; flex-direction: column; gap: 20px; }
+
+.panel {
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  padding: 16px 18px;
+  background: #fff;
+}
+.panel h2 {
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 0 12px;
+  letter-spacing: 0.2px;
+}
+
+.regs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px 14px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+}
+.reg { display: flex; justify-content: space-between; gap: 8px; }
+.reg span:first-child { color: #999; }
+.reg span:last-child { font-variant-numeric: tabular-nums; }
+.reg.set span:last-child { color: #111; font-weight: 500; }
+
+.panel-note {
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: #777;
+  white-space: pre-wrap;
+  line-height: 1.7;
+  border-top: 1px dashed #e5e5e5;
+  padding-top: 10px;
+}
+
+.howto { margin: 0; padding-left: 18px; font-size: 13px; color: #333; }
+.howto li { margin-bottom: 6px; }
+.howto code {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: #f5f5f5;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.keys-help {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #555;
+  display: grid;
+  gap: 5px;
+}
+kbd {
+  font-family: var(--mono);
+  font-size: 11px;
+  border: 1px solid #ddd;
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  padding: 0 4px;
+  background: #fafafa;
+}
+
+/* ============ 响应式 ============ */
+
+@media (max-width: 820px) {
+  .wrap { grid-template-columns: 1fr; }
+  .calc { max-width: 380px; margin: 0 auto; }
+}
+@media (max-width: 400px) {
+  .wrap { padding: 0 14px 32px; }
+  .key { font-size: 10.5px; padding: 5px 1px 4px; }
+  .key.digit { font-size: 13px; }
+  .key.two-line .k-main { font-size: 9px; }
+  .key.two-line .k-snd { font-size: 7.5px; }
+  .snd { font-size: 6.5px; }
+  .lcd-value { font-size: 18px; }
+  .brand-model { font-size: 19px; }
+}

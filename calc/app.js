@@ -3,8 +3,25 @@
    状态机：标准计算 / TVM / 现金流 / 摊销 / 债券 / 设置
    ============================================================ */
 
-/* ---------- 按键布局（5 列） ---------- */
+/* ---------- 按键布局（5 列 · 与真机一致） ---------- */
 const LAYOUT = [
+  // Row 1: 顶行（双行标签：主功能 + 黄色 2nd 功能同印在键上）
+  [
+    { id: "QUIT", label: "QUIT", snd: "CPT", cls: "two-line" },
+    { id: "SET", label: "SET", snd: "ENTER", cls: "two-line" },
+    { id: "UP", label: "\u2191", snd: "DEL", cls: "two-line" },
+    { id: "DOWN", label: "\u2193", snd: "INS", cls: "two-line" },
+    { id: "ON", label: "ON", snd: "OFF", cls: "two-line" },
+  ],
+  // Row 2: 2nd + CF / NPV / IRR / →（2nd 是奶黄键）
+  [
+    { id: "2nd", label: "2nd", cls: "snd-key" },
+    { id: "CF", label: "CF" },
+    { id: "NPV", label: "NPV" },
+    { id: "IRR", label: "IRR" },
+    { id: "RIGHT", label: "\u2192", cls: "arrow" },
+  ],
+  // Row 3: TVM（键上方黄色 2nd 标签印在机身上）
   [
     { id: "N", label: "N", snd: "xP/Y", cls: "tvm" },
     { id: "IY", label: "I/Y", snd: "P/Y", cls: "tvm" },
@@ -12,60 +29,53 @@ const LAYOUT = [
     { id: "PMT", label: "PMT", snd: "BGN", cls: "tvm" },
     { id: "FV", label: "FV", snd: "CLR TVM", cls: "tvm" },
   ],
+  // Row 4: 数学（深键，键上方 2nd 标签）
   [
-    { id: "CF", label: "CF" },
-    { id: "NPV", label: "NPV" },
-    { id: "IRR", label: "IRR" },
-    { id: "UP", label: "\u2191", cls: "arrow" },
-    { id: "DOWN", label: "\u2193", cls: "arrow" },
+    { id: "POW", label: "y\u02e3", snd: "K" },
+    { id: "PCT", label: "%", snd: "\u221ax" },
+    { id: "SQR", label: "x\u00b2", snd: "HYP" },
+    { id: "INV", label: "1/x", snd: "INV" },
+    { id: "DIV", label: "\u00f7", snd: "RAND", cls: "op" },
   ],
+  // Row 5: 更多数学
   [
-    { id: "2nd", label: "2nd" },
-    { id: "CEC", label: "CE/C", snd: "CLR WORK" },
-    { id: "ENTER", label: "ENTER", snd: "SET", cls: "enter" },
-    { id: "CPT", label: "CPT", snd: "QUIT" },
-    { blank: true },
+    { id: "INVHYP", label: "INV" },
+    { id: "LPAR", label: "(", snd: "e\u02e3" },
+    { id: "RPAR", label: ")", snd: "LN" },
+    { id: "STO", label: "STO", snd: "ROUND" },
+    { id: "MUL", label: "\u00d7", snd: "STAT", cls: "op" },
   ],
+  // Row 6: 7 8 9 −
   [
-    { id: "PCT", label: "%" },
-    { id: "SQRT", label: "\u221ax" },
-    { id: "SQR", label: "x\u00b2" },
-    { id: "INV", label: "1/x" },
-    { id: "DIV", label: "\u00f7", cls: "op" },
-  ],
-  [
-    { id: "POW", label: "y\u02e3" },
-    { id: "LPAR", label: "(" },
-    { id: "RPAR", label: ")" },
-    { id: "LN", label: "LN", snd: "e\u02e3" },
-    { id: "MUL", label: "\u00d7", cls: "op" },
-  ],
-  [
-    { id: "STO", label: "STO" },
+    { id: "DATE", label: "DATE", snd: "STO" },
     { id: "7", label: "7", cls: "digit" },
     { id: "8", label: "8", cls: "digit" },
     { id: "9", label: "9", cls: "digit" },
-    { id: "SUB", label: "\u2212", cls: "op" },
+    { id: "SUB", label: "\u2212", snd: "nPr", cls: "op" },
   ],
+  // Row 7: 4 5 6 +
   [
-    { id: "RCL", label: "RCL" },
+    { id: "BOND", label: "BOND", snd: "RCL" },
     { id: "4", label: "4", cls: "digit" },
     { id: "5", label: "5", cls: "digit" },
     { id: "6", label: "6", cls: "digit" },
-    { id: "ADD", label: "+", cls: "op" },
+    { id: "ADD", label: "+", snd: "nCr", cls: "op" },
   ],
+  // Row 8: 1 2 3 =（= 占两行）
   [
-    { blank: true },
+    { id: "CEC", label: "CE|C", snd: "CLR WORK" },
     { id: "1", label: "1", cls: "digit" },
     { id: "2", label: "2", cls: "digit" },
     { id: "3", label: "3", cls: "digit" },
-    { id: "EQ", label: "=", cls: "tall" },
+    { id: "EQ", label: "=", snd: "ANS", cls: "tall op" },
   ],
+  // Row 9: 0 . +/−（= 跨到这一行）
   [
-    { blank: true },
+    { id: "MEM", label: "MEM", snd: "FORMAT" },
     { id: "0", label: "0", cls: "digit" },
-    { id: "DOT", label: "." },
-    { id: "PM", label: "+/\u2212" },
+    { id: "DOT", label: ".", cls: "digit" },
+    { id: "PM", label: "+/\u2212", cls: "digit" },
+    { blank: true },
   ],
 ];
 
@@ -443,7 +453,8 @@ function render() {
     std: "TVM / 标准计算", cf: "现金流工作表", npv: "NPV", irr: "IRR",
     amort: "摊销工作表 AMORT", bond: "债券工作表 BOND", pyset: "P/Y · C/Y 设置",
   };
-  $("#mode-line").textContent = S.on ? (modes[S.mode] || "") : "OFF";
+  const ml = $("#mode-line");
+  if (ml) ml.textContent = S.on ? (modes[S.mode] || "") : "OFF";
 
   // 寄存器面板
   const regs = REG_KEYS.map(([lab, key]) => {
@@ -454,8 +465,6 @@ function render() {
     `<div class="reg set"><span>P/Y</span><span>${S.py}</span></div>` +
     `<div class="reg set"><span>C/Y</span><span>${S.cy}</span></div>` +
     `<div class="reg"><span>付款时点</span><span>${S.bgn ? "BGN 期初" : "END 期末"}</span></div>`;
-
-  $("#foot-hint").textContent = `P/Y = ${S.py} \u00b7 C/Y = ${S.cy} \u00b7 ${S.bgn ? "BGN" : "END"}`;
 
   // 现金流视图
   if (S.cf.list.length || S.cf.c0 !== 0) {
@@ -505,13 +514,17 @@ function enterCfMode() {
 
 /* ---------- 按键分发 ---------- */
 function press(id) {
-  if (!S.on && id !== "ONOFF") return;
+  if (!S.on && id !== "ONOFF" && id !== "ON") return;
   S.err = false;
+
+  // 真机上 ENTER 是 SET 键的 2nd 功能；这里也允许直接 press("ENTER")
+  if (id === "ENTER") id = "SET";
+  // 真机上 CPT 是 QUIT 键的 2nd 功能；这里也允许直接 press("CPT")
+  // CPT 的逻辑保持原样，press("CPT") 直接进入 CPT 等待态
+  if (id === "ONOFF") id = "ON";
 
   const second = S.snd;
   S.snd = false;
-
-  if (id === "ONOFF") { S.on = !S.on; render(); return; }
 
   if (second) { pressSnd(id); render(); return; }
   pressMain(id);
@@ -687,6 +700,40 @@ function pressMain(id) {
       S.entry = null;
       return;
     }
+    // 顶行 / 右移 / 工作表入口的桩
+    case "QUIT":
+      S.entry = null;
+      S.label = "";
+      S.expr = "";
+      S.cur = 0;
+      S.mode = "std";
+      return;
+    case "SET":
+      commitEnter(currentNum());
+      return;
+    case "ON":
+      S.on = !S.on;
+      return;
+    case "RIGHT":
+      // 工作表里当 ENTER 用
+      commitEnter(currentNum());
+      return;
+    case "INVHYP":
+      // 真机上作为下个运算的逆运算；这里简化为 1/x
+      S.cur = S.cur !== 0 ? 1 / S.cur : 0;
+      S.entry = null;
+      return;
+    case "DATE":
+    case "MEM":
+    case "FORMAT":
+    case "ANS":
+      S.label = "工作表开发中";
+      return;
+    case "BOND":
+      S.mode = "bond";
+      S.bdPos = 0;
+      setDisplay(S.bond.cpn || 0, "CPN=");
+      return;
   }
 }
 
@@ -872,6 +919,11 @@ function pressSnd(id) {
       S.cur = Math.exp(currentNum());
       S.entry = null;
       return;
+    case "PCT":
+      // 2nd + % = √x
+      S.cur = Math.sqrt(currentNum());
+      S.entry = null;
+      return;
     case "9":
       S.mode = "bond";
       S.bdPos = 0;
@@ -914,19 +966,35 @@ function buildKeypad() {
       const slot = document.createElement("div");
       slot.className = "slot";
       if (k.blank) {
-        const b = document.createElement("div");
+        const b = document.createElement("button");
         b.className = "key blank";
-        slot.appendChild(document.createElement("div")).className = "snd";
+        b.tabIndex = -1;
         slot.appendChild(b);
         pad.appendChild(slot);
         return;
       }
+      // 双行键（顶行 QUIT/CPT 等）：主+2nd 都印在键上，不显示键上方 snd
+      if (k.cls === "two-line") {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "key dark two-line";
+        btn.dataset.id = k.id;
+        btn.innerHTML = `<span class="k-main">${k.label}</span><span class="k-snd">${k.snd || ""}</span>`;
+        btn.addEventListener("click", () => {
+          flash(btn);
+          press(k.id);
+        });
+        slot.appendChild(btn);
+        pad.appendChild(slot);
+        return;
+      }
+      // 普通键：上方印 snd 标签（黄色，印在机身上），键上是主标签
       const snd = document.createElement("div");
       snd.className = "snd";
       snd.textContent = k.snd || "";
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "key " + (k.cls || "fn");
+      btn.className = "key " + (k.cls || "dark");
       btn.textContent = k.label;
       btn.dataset.id = k.id;
       btn.addEventListener("click", () => {
@@ -937,10 +1005,6 @@ function buildKeypad() {
       slot.appendChild(btn);
       pad.appendChild(slot);
     });
-  });
-  document.getElementById("key-onoff").addEventListener("click", () => {
-    S.on = !S.on;
-    render();
   });
 }
 
@@ -978,3 +1042,8 @@ document.addEventListener("keydown", (e) => {
 /* ---------- 启动 ---------- */
 buildKeypad();
 render();
+
+// 暴露给测试 / 控制台调试（生产环境无副作用）
+if (typeof window !== "undefined") {
+  window.__calc = { S, press, render };
+}

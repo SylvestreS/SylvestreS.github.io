@@ -217,6 +217,14 @@
     render();
   }
 
+  function calcClearAll() {
+    S.entry = "";
+    S.history = [];
+    S.cursor = -1;
+    S.ans = null;
+    render();
+  }
+
   function calcEnter() {
     const input = S.entry.trim();
     if (!input) return;
@@ -346,9 +354,11 @@
     }
 
     if (S.currentApp === "calculator") {
+      // ctrl + =  →  赋值 :=
+      if (S.ctrl && action === "equals") return calcAppend(":=");
       if (action === "equals")   return calcAppend("=");
       if (action === "e_pow")    return calcAppend("e^");
-      if (action === "ten_pow")  return calcAppend("10^");
+      if (action === "ten_pow")  return calcAppend("*10^");
       if (action === "divide")   return calcAppend("/");
       if (action === "minus")    return calcAppend("-");
       if (action === "paren_r")  return calcAppend(")");
@@ -382,9 +392,17 @@
       if (action === "tan")      return calcAppend("tan(");
       if (action === "factor")   return calcAppend("factor(");
       if (action === "simplify") return calcAppend("simplify(");
+      if (action === "arcsin")  return calcAppend("arcsin(");
+      if (action === "arccos")  return calcAppend("arccos(");
+      if (action === "arctan")  return calcAppend("arctan(");
+      if (action === "pi")      return calcAppend("pi");
+      if (action === "ekey")    return calcAppend("e");
+      if (action === "assign")  return calcAppend(":=");
+      if (action === "ge")      return calcAppend(">=");
+      if (action === "clear")   return calcClearAll();
       if (action === "catlg")    return flash("CATALOG（占位）");
       if (action === "angle")    return calcAppend("∠");
-      if (action === "ee")       return calcAppend("10^");
+      if (action === "ee")       return calcAppend("*10^");
       if (action === "flag" || action === "flag2" || action === "flag3") return flash("FLAG（占位）");
       if (action === "toggle-exact") return calcToggleMode();
       if (action === "del")      return calcBackspace();
@@ -457,6 +475,7 @@
       if (e.key === "ArrowDown")  return calcHistoryDown();
       if (e.key === "Shift") return S.shift = true, updateModBody();
       if (e.key === "Control") return S.ctrl = true, updateModBody();
+      if (e.ctrlKey && e.key === "=") { S.ctrl = false; updateModBody(); return calcAppend(":="); }
       if (e.key.length === 1) calcAppend(e.key);
     });
     document.addEventListener("keyup", (e) => {

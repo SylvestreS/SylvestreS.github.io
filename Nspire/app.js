@@ -316,7 +316,12 @@
   // ============================================================
   function handleKey(el) {
     const char = el.getAttribute("data-char");
-    const action = el.getAttribute("data-action");
+    let action = el.getAttribute("data-action");
+    // 双标签键：shift 激活时优先用副标签 action
+    if (S.shift) {
+      const alt = el.getAttribute("data-action-shift");
+      if (alt) action = alt;
+    }
     const mod = el.getAttribute("data-key");
 
     // 修饰键
@@ -341,6 +346,14 @@
     }
 
     if (S.currentApp === "calculator") {
+      if (action === "equals")   return calcAppend("=");
+      if (action === "e_pow")    return calcAppend("e^");
+      if (action === "ten_pow")  return calcAppend("10^");
+      if (action === "divide")   return calcAppend("/");
+      if (action === "minus")    return calcAppend("-");
+      if (action === "paren_r")  return calcAppend(")");
+      if (action === "lt-icon1" || action === "lt-icon2" || action === "lt-icon3" || action === "lt-icon-r2") return flash("模板键（占位）");
+      if (action === "lt-enter") return calcEnter();
       if (action === "enter") return calcEnter();
       if (action === "backspace") return calcBackspace();
       if (action === "clear-entry") return calcClearEntry();

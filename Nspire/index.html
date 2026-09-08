@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TI-Nspire CX II CAS · 网页版</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="nspire">
+    <div class="machine">
+
+      <!-- 屏幕边框 -->
+      <div class="screen-frame">
+        <div class="screen" id="screen">
+          <div class="lcd" id="lcd">
+            <!-- 由 app.js 渲染 -->
+          </div>
+        </div>
+
+        <!-- 顶部品牌条 -->
+        <div class="screen-brand">
+          <span class="brand-ti">TI</span>
+          <span class="brand-nspire">Nspire™</span>
+          <span class="brand-cx">CX II</span>
+          <span class="brand-cas">CAS</span>
+        </div>
+      </div>
+
+      <!-- Touchpad -->
+      <div class="touchpad-wrap">
+        <div class="touchpad" id="touchpad">
+          <div class="tp-up"    data-dir="up">▲</div>
+          <div class="tp-right" data-dir="right">▶</div>
+          <div class="tp-down"  data-dir="down">▼</div>
+          <div class="tp-left"  data-dir="left">◀</div>
+          <div class="tp-center"></div>
+        </div>
+        <div class="tp-label">Touchpad</div>
+      </div>
+
+      <!-- 键盘 -->
+      <div class="keyboard">
+        <!-- 1. 修饰键行 -->
+        <div class="key-row modifiers">
+          <button class="key mod"        data-key="esc">esc</button>
+          <button class="key mod"        data-key="home" title="显示主屏幕">home</button>
+          <button class="key mod"        data-key="doc">doc▼</button>
+          <button class="key mod"        data-key="tab">tab</button>
+          <button class="key mod"        data-key="menu">menu</button>
+          <button class="key mod mod-shift" data-key="shift">shift</button>
+          <button class="key mod"        data-key="del">del</button>
+          <button class="key mod mod-ctrl"  data-key="ctrl">ctrl</button>
+          <button class="key mod"        data-key="var">var</button>
+        </div>
+
+        <!-- 2. 数学模板符号行 -->
+        <div class="key-row templates">
+          <button class="key sym" data-action="d_dx">d⁄dx</button>
+          <button class="key sym" data-action="integral">∫</button>
+          <button class="key sym" data-action="sqrt">√(</button>
+          <button class="key sym" data-action="power2">x²</button>
+          <button class="key sym" data-action="power-1">x⁻¹</button>
+          <button class="key sym" data-action="log">log</button>
+          <button class="key sym" data-action="ln">ln</button>
+          <button class="key sym" data-action="sin">sin</button>
+          <button class="key sym" data-action="cos">cos</button>
+          <button class="key sym" data-action="tan">tan</button>
+        </div>
+
+        <!-- 2.5 括号 / 比较符号行 -->
+        <div class="key-row symbols">
+          <button class="key op" data-char="(">(</button>
+          <button class="key op" data-char=")">)</button>
+          <button class="key op" data-char=",">,</button>
+          <button class="key op" data-action="assign">:=</button>
+          <button class="key op" data-char="=">=</button>
+          <button class="key op" data-char="<">&lt;</button>
+          <button class="key op" data-char=">">&gt;</button>
+          <button class="key op" data-action="le">≤</button>
+          <button class="key op" data-action="ge">≥</button>
+          <button class="key op" data-action="frac2">⁄</button>
+        </div>
+
+        <!-- 3. QWERTY 字母行 1 -->
+        <div class="key-row qwerty">
+          <button class="key letter" data-char="q">q</button>
+          <button class="key letter" data-char="w">w</button>
+          <button class="key letter" data-char="e">e</button>
+          <button class="key letter" data-char="r">r</button>
+          <button class="key letter" data-char="t">t</button>
+          <button class="key letter" data-char="y">y</button>
+          <button class="key letter" data-char="u">u</button>
+          <button class="key letter" data-char="i">i</button>
+          <button class="key letter" data-char="o">o</button>
+          <button class="key letter" data-char="p">p</button>
+        </div>
+
+        <!-- 4. QWERTY 字母行 2 -->
+        <div class="key-row qwerty">
+          <button class="key letter" data-char="a">a</button>
+          <button class="key letter" data-char="s">s</button>
+          <button class="key letter" data-char="d">d</button>
+          <button class="key letter" data-char="f">f</button>
+          <button class="key letter" data-char="g">g</button>
+          <button class="key letter" data-char="h">h</button>
+          <button class="key letter" data-char="j">j</button>
+          <button class="key letter" data-char="k">k</button>
+          <button class="key letter" data-char="l">l</button>
+          <button class="key"        data-action="clear-entry">CE</button>
+        </div>
+
+        <!-- 5. QWERTY 字母行 3（含 caps 与回删） -->
+        <div class="key-row qwerty">
+          <button class="key mod mod-shift" data-key="caps">caps</button>
+          <button class="key letter" data-char="z">z</button>
+          <button class="key letter" data-char="x">x</button>
+          <button class="key letter" data-char="c">c</button>
+          <button class="key letter" data-char="v">v</button>
+          <button class="key letter" data-char="b">b</button>
+          <button class="key letter" data-char="n">n</button>
+          <button class="key letter" data-char="m">m</button>
+          <button class="key letter" data-char=",">,</button>
+          <button class="key"        data-action="backspace">⌫</button>
+        </div>
+
+        <!-- 6. 数字键盘 4×4 + 右侧 enter 跨两行 -->
+        <div class="key-row numpad-wrap">
+          <div class="numpad">
+            <button class="key"   data-char="7">7</button>
+            <button class="key"   data-char="8">8</button>
+            <button class="key"   data-char="9">9</button>
+            <button class="key op" data-char="/">÷</button>
+
+            <button class="key"   data-char="4">4</button>
+            <button class="key"   data-char="5">5</button>
+            <button class="key"   data-char="6">6</button>
+            <button class="key op" data-char="*">×</button>
+
+            <button class="key"   data-char="1">1</button>
+            <button class="key"   data-char="2">2</button>
+            <button class="key"   data-char="3">3</button>
+            <button class="key op" data-char="-">−</button>
+
+            <button class="key"   data-char="0">0</button>
+            <button class="key"   data-char=".">.</button>
+            <button class="key op" data-action="negate">±</button>
+            <button class="key op" data-char="+">+</button>
+          </div>
+
+          <div class="side-keys">
+            <button class="key sym" data-action="power">^</button>
+            <button class="key sym" data-action="frac">a⁄b</button>
+            <button class="key enter big" data-action="enter">enter</button>
+          </div>
+        </div>
+
+        <!-- 7. 底部：Ans / space / 其他 -->
+        <div class="key-row bottom">
+          <button class="key sym" data-char="π">π</button>
+          <button class="key sym" data-char="θ">θ</button>
+          <button class="key sym" data-action="ans">Ans</button>
+          <button class="key sym" data-action="approx">≈</button>
+          <button class="key sym" data-action="factor">factor</button>
+          <button class="key sym" data-action="simplify">simplify</button>
+          <button class="key space" data-action="space">space</button>
+          <button class="key enter" data-action="enter">↵</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="vendor/algebrite.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

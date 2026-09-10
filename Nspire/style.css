@@ -601,3 +601,118 @@ body.shift-on .key.dual .main { color: #888; }
   padding: 1px 3px;
 }
 .graph-window .gbtn { grid-column: span 2; justify-self: start; }
+
+/* ===================== 通用 App 顶栏 ===================== */
+.lcd .app-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  padding: 1px 2px 3px;
+  border-bottom: 1px solid rgba(0,0,0,0.18);
+  margin-bottom: 3px;
+}
+.lcd .app-title {
+  font-weight: 700;
+  color: #1a3a6b;
+  font-size: 13px;
+  margin-right: auto;
+}
+.lcd .app-sub { font-size: 9px; color: #666; }
+.lcd .gbtn {
+  background: #3a6ea5;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  padding: 2px 7px;
+  font-size: 10px;
+  cursor: pointer;
+}
+.lcd .gbtn:hover { background: #4a7eb5; }
+.lcd .gbtn.active { background: #c0504d; }
+
+/* ===================== Notes ===================== */
+.lcd .notes-view { display: flex; flex-direction: column; height: 100%; }
+.lcd .notes-area {
+  flex: 1;
+  width: 100%;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  padding: 5px;
+  font-family: "Lucida Sans", "Segoe UI", sans-serif;
+  font-size: 13px;
+  color: #222;
+  resize: none;
+  background: #fffdf5;
+}
+
+/* ===================== Lists / Spreadsheet ===================== */
+.lcd .grid-view { display: flex; flex-direction: column; height: 100%; }
+.lcd .cell-edit-row { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+.lcd .cell-ref { font-weight: 700; color: #1a3a6b; font-size: 12px; min-width: 28px; }
+.lcd .cell-edit {
+  flex: 1; font-size: 12px; border: 1px solid #999; border-radius: 2px; padding: 2px 4px; color: #222;
+}
+.lcd .grid {
+  display: grid;
+  gap: 1px;
+  background: #bbb;
+  border: 1px solid #999;
+  border-radius: 2px;
+  overflow: auto;
+  flex: 1;
+}
+.lcd .cell {
+  background: #fff;
+  font-size: 11px;
+  padding: 2px 4px;
+  color: #222;
+  min-height: 18px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.lcd .cell.active { background: #d6e6ff; outline: 2px solid #1a3a6b; outline-offset: -2px; }
+
+/* ===================== Data & Statistics ===================== */
+.lcd .data-view { display: flex; flex-direction: column; height: 100%; gap: 3px; }
+.lcd .data-entry-row { display: flex; gap: 4px; }
+.lcd .data-entry { flex: 1; font-size: 12px; border: 1px solid #999; border-radius: 2px; padding: 2px 4px; color: #222; }
+.lcd .data-plot-btns { display: flex; gap: 4px; }
+.lcd .data-canvas {
+  width: 100%; height: auto; aspect-ratio: 9 / 5; background: #fff;
+  border: 1px solid #888; border-radius: 2px; display: block;
+}
+.lcd .data-stat { font-size: 10px; color: #333; }
+
+/* ===================== Geometry ===================== */
+.lcd .geom-view { display: flex; flex-direction: column; height: 100%; gap: 3px; }
+.lcd .geom-canvas {
+  width: 100%; height: auto; aspect-ratio: 3 / 2; background: #fff;
+  border: 1px solid #888; border-radius: 2px; display: block; cursor: crosshair;
+}
+.lcd .geom-hint { font-size: 9px; color: #666; }
+
+/* ===================== Python ===================== */
+.lcd .py-view { display: flex; flex-direction: column; height: 100%; gap: 3px; }
+.lcd .py-code {
+  flex: 1; width: 100%; min-height: 80px;
+  border: 1px solid #999; border-radius: 3px; padding: 5px;
+  font-family: "Consolas", "Menlo", monospace; font-size: 12px; color: #222;
+  background: #1e1e1e; color: #d4d4d4; resize: none;
+}
+.lcd .py-out {
+  height: 33%; min-height: 40px; overflow: auto;
+  border: 1px solid #999; border-radius: 3px; padding: 4px;
+  font-family: "Consolas", "Menlo", monospace; font-size: 11px;
+  background: #f4f4f0; color: #222; white-space: pre-wrap;
+}
+
+/* ===================== Vernier ===================== */
+.lcd .vernier-view { display: flex; flex-direction: column; height: 100%; gap: 3px; }
+.lcd .vernier-canvas {
+  width: 100%; height: auto; aspect-ratio: 9 / 5; background: #fff;
+  border: 1px solid #888; border-radius: 2px; display: block;
+}
+.lcd .vernier-note { font-size: 9px; color: #777; }
+.lcd .vernier-stat { font-size: 10px; color: #333; }

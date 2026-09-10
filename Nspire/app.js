@@ -23,12 +23,12 @@
   const APPS = [
     { id: "calculator", name: "Calculator", icon: "🧮", implemented: true },
     { id: "graphs",     name: "Graphs",     icon: "📈", implemented: true },
-    { id: "geometry",   name: "Geometry",   icon: "📐", implemented: false },
-    { id: "lists",      name: "Lists & Spreadsheet", icon: "📋", implemented: false },
-    { id: "notes",      name: "Notes",      icon: "📝", implemented: false },
-    { id: "data",       name: "Data & Statistics",   icon: "📊", implemented: false },
-    { id: "python",     name: "Python",     icon: "🐍", implemented: false },
-    { id: "vernier",    name: "Vernier DataQuest",   icon: "🔬", implemented: false },
+    { id: "geometry",   name: "Geometry",   icon: "📐", implemented: true },
+    { id: "lists",      name: "Lists & Spreadsheet", icon: "📋", implemented: true },
+    { id: "notes",      name: "Notes",      icon: "📝", implemented: true },
+    { id: "data",       name: "Data & Statistics",   icon: "📊", implemented: true },
+    { id: "python",     name: "Python",     icon: "🐍", implemented: true },
+    { id: "vernier",    name: "Vernier DataQuest",   icon: "🔬", implemented: true },
   ];
 
   const lcd = document.getElementById("lcd");
@@ -104,6 +104,12 @@
     if (S.currentApp === "home") return renderHome();
     if (S.currentApp === "calculator") return renderCalculator();
     if (S.currentApp === "graphs") return renderGraphs();
+    if (S.currentApp === "notes") return renderNotes();
+    if (S.currentApp === "lists") return renderLists();
+    if (S.currentApp === "data") return renderData();
+    if (S.currentApp === "geometry") return renderGeometry();
+    if (S.currentApp === "python") return renderPython();
+    if (S.currentApp === "vernier") return renderVernier();
     return renderStub(S.currentApp);
   }
 
@@ -193,6 +199,12 @@
     if (id === "graphs" && !S.graphs) {
       S.graphs = defaultGraphs();
     }
+    if (id === "notes" && !S.notes) S.notes = defaultNotes();
+    if (id === "lists" && !S.lists) S.lists = defaultLists();
+    if (id === "data" && !S.data) S.data = defaultData();
+    if (id === "geometry" && !S.geom) S.geom = defaultGeom();
+    if (id === "python" && !S.python) S.python = defaultPython();
+    if (id === "vernier" && !S.vernier) S.vernier = defaultVernier();
     render();
   }
 
@@ -461,8 +473,8 @@
       return;
     }
 
-    // 其它占位应用
-    if (mod === "del") return;
+    // 其它应用（notes/lists/data/geometry/python/vernier）
+    return appDispatch(action, char, mod);
   }
 
   function toggleShift() {
@@ -498,6 +510,24 @@
         if (t.classList.contains("tp-center") || t === tp) return graphToggleTrace();
         return;
       }
+      if (S.currentApp === "lists") {
+        const L = S.lists;
+        if (t.classList.contains("tp-up"))    { L.active.r = Math.max(0, L.active.r - 1); L.edit = L.data[L.active.r][L.active.c]; render(); return; }
+        if (t.classList.contains("tp-down"))  { L.active.r = Math.min(L.rows - 1, L.active.r + 1); L.edit = L.data[L.active.r][L.active.c]; render(); return; }
+        if (t.classList.contains("tp-left"))  { L.active.c = Math.max(0, L.active.c - 1); L.edit = L.data[L.active.r][L.active.c]; render(); return; }
+        if (t.classList.contains("tp-right")) { L.active.c = Math.min(L.cols - 1, L.active.c + 1); L.edit = L.data[L.active.r][L.active.c]; render(); return; }
+        if (t.classList.contains("tp-center") || t === tp) return listsCommit();
+        return;
+      }
+      if (S.currentApp === "data") {
+        if (t.classList.contains("tp-center") || t === tp) return dataAdd();
+        return;
+      }
+      if (S.currentApp === "notes" || S.currentApp === "python") {
+        if (t.classList.contains("tp-center") || t === tp) return appType("\n");
+        return;
+      }
+      if (S.currentApp === "geometry" || S.currentApp === "vernier") return;
       if (t.classList.contains("tp-up"))    return calcHistoryUp();
       if (t.classList.contains("tp-down"))  return calcHistoryDown();
       if (t.classList.contains("tp-left"))  return flash("LEFT（占位）");
@@ -511,8 +541,8 @@
   // ============================================================
   function setupPhysicalKeyboard() {
     document.addEventListener("keydown", (e) => {
-      if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
       if (e.key === "Escape" || e.key === "Home") return openApp("home");
+      if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
 
       if (S.currentApp === "graphs") {
         if (e.key === "Enter") return graphCommit();
@@ -960,6 +990,510 @@
       });
     }
     drawGraph();
+  }
+
+  // ============================================================
+  //  通用：文本型 App 的键盘输入
+  // ============================================================
+  function appActiveInput() {
+    const app = S.currentApp;
+    if (app === "notes") return document.getElementById("notes-area");
+    if (app === "python") return document.getElementById("py-code");
+    if (app === "lists")  return document.getElementById("cell-edit");
+    if (app === "data")   return document.getElementById("data-entry");
+    return null;
+  }
+  function appType(text) {
+    const el = appActiveInput();
+    if (!el) return;
+    const s = el.selectionStart == null ? el.value.length : el.selectionStart;
+    const e = el.selectionEnd == null ? el.value.length : el.selectionEnd;
+    el.value = el.value.slice(0, s) + text + el.value.slice(e);
+    const pos = s + text.length;
+    try { el.selectionStart = el.selectionEnd = pos; } catch (_) {}
+    el.focus();
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+  function appBackspace() {
+    const el = appActiveInput();
+    if (!el) return;
+    const s = el.selectionStart == null ? el.value.length : el.selectionStart;
+    const e = el.selectionEnd == null ? el.value.length : el.selectionEnd;
+    if (s !== e) el.value = el.value.slice(0, s) + el.value.slice(e);
+    else if (s > 0) el.value = el.value.slice(0, s - 1) + el.value.slice(s);
+    const pos = Math.max(0, s !== e ? s : s - 1);
+    try { el.selectionStart = el.selectionEnd = pos; } catch (_) {}
+    el.focus();
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+  // 字母默认小写（与真机一致）
+  function appChar(char) {
+    if (char == null) return null;
+    if (/^[A-Za-z]$/.test(char)) {
+      const lo = char.toLowerCase();
+      const up = char.toUpperCase();
+      return S.shift ? (S.caps ? lo : up) : (S.caps ? up : lo);
+    }
+    return char;
+  }
+  const TEXT_INSERT = {
+    equals: "=", divide: "/", minus: "-", paren_r: ")",
+    sin: "sin(", cos: "cos(", tan: "tan(",
+    arcsin: "asin(", arccos: "acos(", arctan: "atan(",
+    ln: "ln(", log: "log(", sqrt: "sqrt(", pi: "pi", ekey: "e",
+    e_pow: "e^", ten_pow: "1e", power: "^", power2: "^2",
+    assign: ":=", comma: ",", le: "<=", ge: ">=", space: " ", approx: "~",
+  };
+  const PY_INSERT = {
+    equals: "=", divide: "/", minus: "-", paren_r: ")",
+    sin: "math.sin(", cos: "math.cos(", tan: "math.tan(",
+    arcsin: "math.asin(", arccos: "math.acos(", arctan: "math.atan(",
+    ln: "math.log(", log: "math.log10(", sqrt: "math.sqrt(", pi: "math.pi",
+    ekey: "math.e", e_pow: "math.exp(", ten_pow: "1e", power: "**", power2: "**2",
+    assign: "=", comma: ",", le: "<=", ge: ">=", space: " ", approx: "==",
+  };
+  function appDispatch(action, char, mod) {
+    const app = S.currentApp;
+    if (mod === "home" || mod === "esc") return openApp("home");
+    if (char != null) char = appChar(char);
+    if (app === "notes") {
+      if (mod === "del" || action === "backspace") return appBackspace();
+      if (action === "clear") { S.notes.text = ""; saveNotes(); render(); return; }
+      if (action === "enter" || action === "lt-enter") return appType("\n");
+      let t = char; if (action && TEXT_INSERT[action]) t = TEXT_INSERT[action];
+      if (t != null) appType(t);
+      return;
+    }
+    if (app === "python") {
+      if (mod === "del" || action === "backspace") return appBackspace();
+      if (action === "clear") { S.python.code = ""; render(); return; }
+      if (action === "enter" || action === "lt-enter") return appType("\n");
+      let t = char; if (action && PY_INSERT[action]) t = PY_INSERT[action];
+      if (t != null) appType(t);
+      return;
+    }
+    if (app === "lists")   return listsKey(action, char, mod);
+    if (app === "data")    return dataKey(action, char, mod);
+    if (app === "geometry") return; // 主要由按钮 / 画布驱动
+    if (app === "vernier") return;  // 主要由按钮驱动
+  }
+
+  // ============================================================
+  //  Notes 应用
+  // ============================================================
+  function defaultNotes() {
+    let saved = "";
+    try { saved = localStorage.getItem("nspire-notes") || ""; } catch (_) {}
+    return { text: saved };
+  }
+  function saveNotes() { try { localStorage.setItem("nspire-notes", S.notes.text); } catch (_) {} }
+  function renderNotes() {
+    lcd.innerHTML = `<div class="notes-view">
+      <div class="app-bar">
+        <span class="app-title">Notes</span>
+        <span class="app-sub">Document1 · 自动保存</span>
+        <button class="gbtn" data-gact="home">home</button>
+      </div>
+      <textarea id="notes-area" class="notes-area" placeholder="在此输入笔记…">${escapeHtml(S.notes.text)}</textarea>
+    </div>`;
+    const ta = document.getElementById("notes-area");
+    ta.addEventListener("input", () => { S.notes.text = ta.value; saveNotes(); });
+    document.querySelector('[data-gact="home"]').addEventListener("click", () => openApp("home"));
+    setTimeout(() => ta.focus(), 0);
+  }
+
+  // ============================================================
+  //  Lists & Spreadsheet 应用
+  // ============================================================
+  function defaultLists() {
+    const cols = 6, rows = 12;
+    const data = [];
+    for (let r = 0; r < rows; r++) data.push(new Array(cols).fill(""));
+    return { rows, cols, data, active: { r: 0, c: 0 }, edit: "" };
+  }
+  function colName(c) { return String.fromCharCode(65 + c); }
+  function renderLists() {
+    const L = S.lists;
+    let cells = "";
+    for (let r = 0; r < L.rows; r++) {
+      for (let c = 0; c < L.cols; c++) {
+        const active = (r === L.active.r && c === L.active.c) ? " active" : "";
+        cells += `<div class="cell${active}" data-r="${r}" data-c="${c}">${escapeHtml(L.data[r][c])}</div>`;
+      }
+    }
+    lcd.innerHTML = `<div class="grid-view">
+      <div class="app-bar">
+        <span class="app-title">Lists &amp; Spreadsheet</span>
+        <button class="gbtn" data-gact="home">home</button>
+      </div>
+      <div class="cell-edit-row">
+        <span class="cell-ref">${colName(L.active.c)}${L.active.r + 1}</span>
+        <input id="cell-edit" class="cell-edit" value="${escapeHtml(L.edit)}" placeholder="值或 =A1+B2">
+      </div>
+      <div class="grid" style="grid-template-columns:repeat(${L.cols},1fr)">${cells}</div>
+    </div>`;
+    lcd.querySelectorAll(".cell").forEach((el) => el.addEventListener("click", () => {
+      const r = +el.getAttribute("data-r"), c = +el.getAttribute("data-c");
+      L.active = { r, c }; L.edit = L.data[r][c]; render();
+    }));
+    const inp = document.getElementById("cell-edit");
+    inp.addEventListener("input", () => { L.edit = inp.value; });
+    inp.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); listsCommit(); } });
+    document.querySelector('[data-gact="home"]').addEventListener("click", () => openApp("home"));
+    setTimeout(() => inp.focus(), 0);
+  }
+  function listsCommit() {
+    const L = S.lists;
+    L.data[L.active.r][L.active.c] = L.edit;
+    recalcLists();
+    if (L.active.r < L.rows - 1) L.active = { r: L.active.r + 1, c: L.active.c };
+    L.edit = L.data[L.active.r][L.active.c];
+    render();
+  }
+  function recalcLists() {
+    const L = S.lists;
+    for (let pass = 0; pass < 3; pass++) {
+      for (let r = 0; r < L.rows; r++) for (let c = 0; c < L.cols; c++) {
+        const v = L.data[r][c];
+        if (typeof v === "string" && v.charAt(0) === "=") {
+          try { L.data[r][c] = evalCellFormula(v.slice(1), L); } catch (_) {}
+        }
+      }
+    }
+  }
+  function evalCellFormula(expr, L) {
+    const replaced = expr.replace(/([A-Z])(\d+)/g, (m, col, row) => {
+      const c = col.charCodeAt(0) - 65;
+      const r = parseInt(row, 10) - 1;
+      if (r < 0 || r >= L.rows || c < 0 || c >= L.cols) return "0";
+      const val = L.data[r][c];
+      const n = parseFloat(val);
+      return Number.isFinite(n) ? String(n) : "0";
+    });
+    const r = Function('"use strict";return (' + replaced + ');')();
+    return Number.isFinite(r) ? String(r) : "?";
+  }
+  function listsKey(action, char, mod) {
+    if (mod === "del" || action === "backspace") return appBackspace();
+    if (action === "clear") { S.lists.edit = ""; S.lists.data[S.lists.active.r][S.lists.active.c] = ""; render(); return; }
+    if (action === "enter" || action === "lt-enter") return listsCommit();
+    let t = char; if (action && TEXT_INSERT[action]) t = TEXT_INSERT[action];
+    if (t != null) appType(t);
+  }
+
+  // ============================================================
+  //  Data & Statistics 应用
+  // ============================================================
+  function defaultData() { return { x: [], y: [], plot: "scatter", edit: "" }; }
+  function renderData() {
+    const D = S.data;
+    lcd.innerHTML = `<div class="data-view">
+      <div class="app-bar">
+        <span class="app-title">Data &amp; Statistics</span>
+        <button class="gbtn" data-gact="home">home</button>
+      </div>
+      <div class="data-entry-row">
+        <input id="data-entry" class="data-entry" value="${escapeHtml(D.edit)}" placeholder="x,y 回车添加（或单值）">
+        <button class="gbtn" data-gact="add">Add</button>
+        <button class="gbtn" data-gact="undo">Undo</button>
+      </div>
+      <div class="data-plot-btns">
+        <button class="gbtn" data-gact="scatter">Scatter</button>
+        <button class="gbtn" data-gact="hist">Hist</button>
+        <button class="gbtn" data-gact="box">Box</button>
+      </div>
+      <canvas id="data-canvas" class="data-canvas"></canvas>
+      <div class="data-stat" id="data-stat"></div>
+    </div>`;
+    const inp = document.getElementById("data-entry");
+    inp.addEventListener("input", () => { D.edit = inp.value; });
+    inp.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); dataAdd(); } });
+    lcd.querySelectorAll("[data-gact]").forEach((el) => el.addEventListener("click", () => {
+      const a = el.getAttribute("data-gact");
+      if (a === "home") return openApp("home");
+      if (a === "add") return dataAdd();
+      if (a === "undo") { if (D.x.length) { D.x.pop(); D.y.pop(); drawData(); } return; }
+      if (a === "scatter") { D.plot = "scatter"; drawData(); }
+      if (a === "hist") { D.plot = "hist"; drawData(); }
+      if (a === "box") { D.plot = "box"; drawData(); }
+    }));
+    setTimeout(() => inp.focus(), 0);
+    drawData();
+  }
+  function dataAdd() {
+    const D = S.data;
+    const parts = D.edit.trim().split(/[\s,]+/).filter(Boolean);
+    if (parts.length >= 2) {
+      const x = parseFloat(parts[0]), y = parseFloat(parts[1]);
+      if (Number.isFinite(x) && Number.isFinite(y)) { D.x.push(x); D.y.push(y); }
+    } else if (parts.length === 1) {
+      const v = parseFloat(parts[0]);
+      if (Number.isFinite(v)) { D.x.push(v); D.y.push(NaN); }
+    }
+    D.edit = "";
+    render();
+  }
+  function dataKey(action, char, mod) {
+    if (mod === "del" || action === "backspace") return appBackspace();
+    if (action === "clear") { S.data.edit = ""; render(); return; }
+    if (action === "enter" || action === "lt-enter") return dataAdd();
+    let t = char; if (action && TEXT_INSERT[action]) t = TEXT_INSERT[action];
+    if (t != null) appType(t);
+  }
+  function drawData() {
+    const canvas = document.getElementById("data-canvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext && canvas.getContext("2d");
+    if (!ctx) return;
+    const D = S.data, W = 540, H = 300; canvas.width = W; canvas.height = H;
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+    const stat = document.getElementById("data-stat");
+    if (D.plot === "scatter") {
+      const xs = D.x, ys = D.y.filter((v) => Number.isFinite(v));
+      if (xs.length) {
+        const xmin = Math.min(...xs), xmax = Math.max(...xs);
+        const ymin = Math.min(...ys), ymax = Math.max(...ys);
+        const sx = W / (xmax - xmin || 1), sy = H / (ymax - ymin || 1);
+        ctx.strokeStyle = "#888";
+        xs.forEach((x, i) => { const y = D.y[i]; if (!Number.isFinite(y)) return; const px = (x - xmin) * sx, py = H - (y - ymin) * sy; ctx.fillStyle = "#2b6cff"; ctx.beginPath(); ctx.arc(px, py, 3, 0, 7); ctx.fill(); });
+        if (stat) stat.textContent = `n=${xs.length}  x:[${round2(xmin)}, ${round2(xmax)}]  y:[${round2(ymin)}, ${round2(ymax)}]`;
+      }
+    } else if (D.plot === "hist") {
+      const vals = D.x.filter((v) => Number.isFinite(v));
+      if (vals.length) {
+        const min = Math.min(...vals), max = Math.max(...vals);
+        const bins = 8, bw = (max - min || 1) / bins;
+        const counts = new Array(bins).fill(0);
+        vals.forEach((v) => { let b = Math.floor((v - min) / bw); if (b >= bins) b = bins - 1; if (b < 0) b = 0; counts[b]++; });
+        const maxc = Math.max(...counts, 1), bwpx = W / bins;
+        counts.forEach((c, b) => { const h = H * c / maxc; ctx.fillStyle = "#2b6cff"; ctx.fillRect(b * bwpx + 1, H - h, bwpx - 2, h); });
+        if (stat) stat.textContent = `n=${vals.length}  min=${round2(min)}  max=${round2(max)}  mean=${round2(vals.reduce((a, b) => a + b, 0) / vals.length)}`;
+      }
+    } else if (D.plot === "box") {
+      const vals = D.x.filter((v) => Number.isFinite(v)).slice().sort((a, b) => a - b);
+      if (vals.length) {
+        const q = (p) => vals[Math.floor(p * (vals.length - 1))];
+        const mn = vals[0], mx = vals[vals.length - 1], q1 = q(0.25), med = q(0.5), q3 = q(0.75);
+        const xmin = mn - 0.2 * (mx - mn || 1), xmax = mx + 0.2 * (mx - mn || 1);
+        const sx = W / (xmax - xmin), Y = H / 2;
+        ctx.strokeStyle = "#333"; ctx.lineWidth = 2;
+        const px = (v) => (v - xmin) * sx;
+        ctx.beginPath(); ctx.moveTo(px(mn), Y); ctx.lineTo(px(q1), Y); ctx.moveTo(px(q3), Y); ctx.lineTo(px(mx), Y); ctx.stroke();
+        ctx.fillStyle = "rgba(43,108,255,0.25)"; ctx.fillRect(px(q1), Y - 40, px(q3) - px(q1), 80);
+        ctx.strokeStyle = "#2b6cff"; ctx.strokeRect(px(q1), Y - 40, px(q3) - px(q1), 80);
+        ctx.beginPath(); ctx.moveTo(px(med), Y - 40); ctx.lineTo(px(med), Y + 40); ctx.stroke();
+        if (stat) stat.textContent = `min=${round2(mn)}  Q1=${round2(q1)}  med=${round2(med)}  Q3=${round2(q3)}  max=${round2(mx)}`;
+      }
+    }
+  }
+
+  // ============================================================
+  //  Geometry 应用
+  // ============================================================
+  function defaultGeom() { return { tool: "point", points: [], shapes: [], drag: null, _pending: null, color: "#2b6cff" }; }
+  function renderGeometry() {
+    const G = S.geom;
+    lcd.innerHTML = `<div class="geom-view">
+      <div class="app-bar">
+        <span class="app-title">Geometry</span>
+        <button class="gbtn ${G.tool === "point" ? "active" : ""}" data-gact="tool-point">Point</button>
+        <button class="gbtn ${G.tool === "seg" ? "active" : ""}" data-gact="tool-seg">Segment</button>
+        <button class="gbtn ${G.tool === "line" ? "active" : ""}" data-gact="tool-line">Line</button>
+        <button class="gbtn ${G.tool === "circle" ? "active" : ""}" data-gact="tool-circle">Circle</button>
+        <button class="gbtn" data-gact="clear">Clear</button>
+        <button class="gbtn" data-gact="home">home</button>
+      </div>
+      <canvas id="geom-canvas" class="geom-canvas"></canvas>
+      <div class="geom-hint">点击放置点；线段/直线/圆先点起点再点终点/半径点；拖动点可移动</div>
+    </div>`;
+    lcd.querySelectorAll("[data-gact]").forEach((el) => el.addEventListener("click", () => {
+      const a = el.getAttribute("data-gact");
+      if (a === "home") return openApp("home");
+      if (a === "clear") { G.points = []; G.shapes = []; G._pending = null; drawGeom(); render(); return; }
+      if (a.startsWith("tool-")) { G.tool = a.slice(5); G._pending = null; render(); }
+    }));
+    setupGeomCanvas();
+    drawGeom();
+  }
+  function setupGeomCanvas() {
+    const G = S.geom;
+    const canvas = document.getElementById("geom-canvas");
+    if (!canvas) return;
+    const W = 540, H = 360; canvas.width = W; canvas.height = H;
+    function pos(e) { const r = canvas.getBoundingClientRect(); const sx = W / r.width, sy = H / r.height; return { x: (e.clientX - r.left) * sx, y: (e.clientY - r.top) * sy }; }
+    canvas.onmousedown = (e) => {
+      const p = pos(e);
+      for (const pt of G.points) { if (Math.hypot(pt.x - p.x, pt.y - p.y) < 10) { G.drag = pt; return; } }
+      if (G.tool === "point") { G.points.push({ x: p.x, y: p.y }); drawGeom(); }
+      else if (G.tool === "seg" || G.tool === "line" || G.tool === "circle") {
+        if (!G._pending) G._pending = { x: p.x, y: p.y };
+        else { G.shapes.push({ type: G.tool, a: G._pending, b: { x: p.x, y: p.y }, color: G.color }); G._pending = null; drawGeom(); }
+      }
+    };
+    canvas.onmousemove = (e) => { if (G.drag) { const p = pos(e); G.drag.x = p.x; G.drag.y = p.y; drawGeom(); } };
+    canvas.onmouseup = () => { G.drag = null; };
+  }
+  function drawGeom() {
+    const canvas = document.getElementById("geom-canvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext && canvas.getContext("2d");
+    if (!ctx) return;
+    const G = S.geom, W = canvas.width, H = canvas.height;
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = "#eee";
+    for (let x = 0; x <= W; x += 30) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+    for (let y = 0; y <= H; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+    G.shapes.forEach((s) => {
+      ctx.strokeStyle = s.color; ctx.lineWidth = 2;
+      if (s.type === "seg" || s.type === "line") { ctx.beginPath(); ctx.moveTo(s.a.x, s.a.y); ctx.lineTo(s.b.x, s.b.y); ctx.stroke(); }
+      else if (s.type === "circle") { const r = Math.hypot(s.b.x - s.a.x, s.b.y - s.a.y); ctx.beginPath(); ctx.arc(s.a.x, s.a.y, r, 0, 7); ctx.stroke(); }
+    });
+    G.points.forEach((pt) => { ctx.fillStyle = "#c0392b"; ctx.beginPath(); ctx.arc(pt.x, pt.y, 4, 0, 7); ctx.fill(); });
+    if (G._pending) { ctx.fillStyle = "#888"; ctx.beginPath(); ctx.arc(G._pending.x, G._pending.y, 4, 0, 7); ctx.fill(); }
+  }
+
+  // ============================================================
+  //  Python 应用（Skulpt 真实执行；无引擎时回退到轻量求值器）
+  // ============================================================
+  function defaultPython() {
+    let saved = "";
+    try { saved = localStorage.getItem("nspire-python") || "print(\"Hello, Nspire\")\nfor i in range(3):\n    print(i*i)\n"; } catch (_) {}
+    return { code: saved, output: "", error: "" };
+  }
+  function renderPython() {
+    const P = S.python;
+    lcd.innerHTML = `<div class="py-view">
+      <div class="app-bar">
+        <span class="app-title">Python</span>
+        <button class="gbtn" data-gact="run">Run ▶</button>
+        <button class="gbtn" data-gact="clear">Clear</button>
+        <button class="gbtn" data-gact="home">home</button>
+      </div>
+      <textarea id="py-code" class="py-code" spellcheck="false">${escapeHtml(P.code)}</textarea>
+      <div class="py-out" id="py-out"></div>
+    </div>`;
+    const ta = document.getElementById("py-code");
+    ta.addEventListener("input", () => { P.code = ta.value; try { localStorage.setItem("nspire-python", P.code); } catch (_) {} });
+    lcd.querySelectorAll("[data-gact]").forEach((el) => el.addEventListener("click", () => {
+      const a = el.getAttribute("data-gact");
+      if (a === "home") return openApp("home");
+      if (a === "clear") { P.code = ""; P.output = ""; P.error = ""; render(); return; }
+      if (a === "run") return pythonRun();
+    }));
+  }
+  function pythonRun() {
+    const P = S.python;
+    const out = document.getElementById("py-out");
+    if (typeof Sk !== "undefined") {
+      P.output = ""; P.error = "";
+      try {
+        Sk.configure({
+          output: (s) => { P.output += s; },
+          read: (f) => { if (f === "__main__.py" || f === "<stdin>.py") return P.code; throw new Error("No module: " + f); },
+        });
+        Sk.importMainWithBody("<stdin>", false, P.code, true);
+        setTimeout(() => { if (out) out.textContent = P.output + (P.error ? ("\nError: " + P.error) : ""); }, 0);
+      } catch (e) { P.error = String(e); if (out) out.textContent = "Error: " + P.error; }
+    } else {
+      let buf = "";
+      try { pyFallback(P.code, (s) => { buf += s; }); P.output = buf; }
+      catch (e) { P.error = String(e && e.message ? e.message : e); }
+      if (out) out.textContent = buf + (P.error ? ("\nError: " + P.error) : "");
+    }
+  }
+  // 轻量 Python 子集求值器（无 Skulpt 时可用）：print / 赋值 / for-range / if / 算术 / 常用内置
+  function pyFallback(src, outf) {
+    const raw = src.replace(/\t/g, "    ").split("\n").map((l) => l.replace(/\r$/, ""));
+    const env = {};
+    const __range = (a, b, c) => { if (b === undefined) { b = a; a = 0; c = 1; } if (c === undefined) c = 1; const r = []; if (c > 0) { for (let i = a; i < b; i += c) r.push(i); } else { for (let i = a; i > b; i += c) r.push(i); } return r; };
+    function exprVal(s) {
+      s = String(s).trim();
+      s = s.replace(/True/g, "true").replace(/False/g, "false").replace(/None/g, "null").replace(/\brange\b/g, "__range");
+      // Python 的 // 整数除法 → __fdiv（避免被 JS 当成行注释）
+      let prev;
+      do { prev = s; s = s.replace(/(\S+)\s*\/\/\s*(\S+)/g, "__fdiv($1,$2)"); } while (s !== prev && s.indexOf("//") >= 0);
+      const f = new Function("__range", "__fdiv", "abs", "min", "max", "int", "float", "str", "len", "with(this){ return (" + s + "); }");
+      return f.call(env, __range, (a, b) => Math.floor(a / b), Math.abs, Math.min, Math.max, (x) => parseInt(x, 10), parseFloat, String, (x) => (x && x.length) || 0);
+    }
+    function run(lines, startIndent) {
+      let i = 0;
+      while (i < lines.length) {
+        const line = lines[i];
+        if (!line.trim()) { i++; continue; }
+        const indent = line.search(/\S/);
+        if (indent < startIndent) break;
+        if (indent > startIndent) { i++; continue; }
+        const content = line.trim();
+        if (content.charAt(0) === "#") { i++; continue; }
+        let m;
+        if ((m = content.match(/^print\((.*)\)$/s))) { try { outf(String(exprVal(m[1])) + "\n"); } catch (e) { outf("Error: " + e + "\n"); } i++; continue; }
+        if ((m = content.match(/^(\w+)\s*=\s*(.+)$/))) { try { env[m[1]] = exprVal(m[2]); } catch (e) { outf("Error: " + e + "\n"); } i++; continue; }
+        if ((m = content.match(/^for\s+(\w+)\s+in\s+(.+):$/))) {
+          let iter = []; try { iter = exprVal(m[2]); } catch (e) { outf("Error: " + e + "\n"); }
+          const varName = m[1], body = []; let j = i + 1;
+          while (j < lines.length && lines[j].search(/\S/) > indent) { body.push(lines[j]); j++; }
+          const bodyIndent = body.length ? body[0].search(/\S/) : indent + 4;
+          iter.forEach((v) => { env[varName] = v; run(body, bodyIndent); });
+          i = j; continue;
+        }
+        if ((m = content.match(/^if\s+(.+):$/))) {
+          let cond = false; try { cond = !!exprVal(m[1]); } catch (e) {}
+          const body = []; let j = i + 1;
+          while (j < lines.length && lines[j].search(/\S/) > indent) { body.push(lines[j]); j++; }
+          const bodyIndent = body.length ? body[0].search(/\S/) : indent + 4;
+          if (cond) run(body, bodyIndent);
+          i = j; continue;
+        }
+        i++;
+      }
+    }
+    run(raw, 0);
+    return "";
+  }
+
+  // ============================================================
+  //  Vernier DataQuest 应用（模拟采集，无真实传感器）
+  // ============================================================
+  function defaultVernier() { return { samples: [], collecting: false }; }
+  function renderVernier() {
+    const V = S.vernier;
+    lcd.innerHTML = `<div class="vernier-view">
+      <div class="app-bar">
+        <span class="app-title">Vernier DataQuest</span>
+        <button class="gbtn" data-gact="collect">采集 Collect</button>
+        <button class="gbtn" data-gact="reset">Reset</button>
+        <button class="gbtn" data-gact="home">home</button>
+      </div>
+      <div class="vernier-note">（浏览器无真实传感器，以下为模拟数据）</div>
+      <canvas id="vernier-canvas" class="vernier-canvas"></canvas>
+      <div class="vernier-stat" id="vernier-stat"></div>
+    </div>`;
+    lcd.querySelectorAll("[data-gact]").forEach((el) => el.addEventListener("click", () => {
+      const a = el.getAttribute("data-gact");
+      if (a === "home") return openApp("home");
+      if (a === "reset") { V.samples = []; drawVernier(); return; }
+      if (a === "collect") return vernierCollect();
+    }));
+    drawVernier();
+  }
+  function vernierSample(i) { return Math.round((Math.sin(i / 3) * 8 + (i % 2 ? 1.2 : -1.2) + 10) * 100) / 100; }
+  function vernierCollect() { const V = S.vernier; V.samples.push(vernierSample(V.samples.length)); drawVernier(); }
+  function drawVernier() {
+    const canvas = document.getElementById("vernier-canvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext && canvas.getContext("2d");
+    if (!ctx) return;
+    const V = S.vernier, W = 540, H = 300; canvas.width = W; canvas.height = H;
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+    const st = document.getElementById("vernier-stat");
+    if (V.samples.length) {
+      const ys = V.samples, min = Math.min(...ys), max = Math.max(...ys);
+      const sy = H / (max - min || 1), pad = 20;
+      ctx.strokeStyle = "#2e9e4f"; ctx.lineWidth = 2; ctx.beginPath();
+      ys.forEach((y, i) => { const px = pad + (W - 2 * pad) * i / (ys.length - 1 || 1); const py = H - pad - (y - min) * sy; if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py); });
+      ctx.stroke();
+      if (st) st.textContent = `n=${ys.length}  min=${round2(min)}  max=${round2(max)}  last=${round2(ys[ys.length - 1])}`;
+    }
   }
 
   function setupKeys() {
